@@ -25,10 +25,16 @@
     USE_PROXY: false                       // 未来切到 Vercel 时改 true
   };
 
-  /* ========== API Key 管理 ========== */
+  /* ========== API Key 管理 ==========
+   * 优先级：
+   *   1) window.__DS_KEY__（config.local.js 注入，开发用）
+   *   2) 内嵌默认 Key（公网部署时兜底）
+   *   3) localStorage['ds_key']（用户设置面板填入）
+   */
+  var DEFAULT_KEY = 'sk-d0b9a6d67b66465993c3bc7d6b54873d';
   function getKey() {
     if (global.__DS_KEY__) return global.__DS_KEY__;
-    try { return localStorage.getItem('ds_key') || ''; } catch (e) { return ''; }
+    try { return localStorage.getItem('ds_key') || DEFAULT_KEY; } catch (e) { return DEFAULT_KEY; }
   }
   function setKey(k) {
     try { localStorage.setItem('ds_key', (k || '').trim()); } catch (e) {}
