@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IndustryLens — 行业关键词百科</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=DM+Serif+Display&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fefefe;--surface:#fff;--s2:#f7fafb;--s3:#e6eff0;
+  --text:#0f2a2d;--t2:#47636a;--t3:#8aa4a9;
+  --border:#dce9ea;--border-l:#ecf5f5;
+  /* Natural Palette — 青色系 */
+  --p1:#00AAB8;   /* 深湖青（主强调） */
+  --p2:#1FB8C4;   /* 过渡 */
+  --p3:#4FC2C8;   /* 浅薄荷青（标准色） */
+  --p4:#7FD3D6;   /* 柔和青 */
+  --p5:#B8E4E3;   /* 淡青灰 */
+  --p6:#E6F4F1;   /* 薄雾灰青（最浅） */
+  --accent:#00AAB8;--accent-bg:rgba(0,170,184,0.06);
+  --r:12px;--r2:16px;--r3:24px;
+  --font-display:'Space Grotesk','Noto Sans SC',-apple-system,sans-serif;
+  --font-body:'Inter','Noto Sans SC','PingFang SC',-apple-system,'Helvetica Neue',sans-serif;
+  --font-serif:'DM Serif Display','Noto Serif SC',serif;
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+  --ease-in:cubic-bezier(0.7,0,0.84,0);
+  --ease-elastic:cubic-bezier(0.34,1.56,0.64,1);
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{font-family:var(--font-body);color:var(--text);background:#F9EFE0;line-height:1.6;-webkit-font-smoothing:antialiased;letter-spacing:-.01em;position:relative;min-height:100vh}
+/* ===== 3D 粘土边框背景（四角装饰物，中间留白） ===== */
+body::before{content:'';position:fixed;inset:-4%;z-index:-2;
+  background:url(bg-clay.png) center/cover no-repeat;
+  transform:scale(1.02);animation:bg-breath 14.67s ease-in-out infinite;will-change:transform;
+  filter:saturate(1.02)}
+/* 轻度提亮层：不改色相，只压一层柔光让中央更干净 */
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 85% 80% at 50% 50%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+  mix-blend-mode:soft-light}
+@keyframes bg-breath{
+  0%,100%{transform:scale(1.02) translate(0,0)}
+  33%{transform:scale(1.04) translate(-8px,-6px)}
+  66%{transform:scale(1.03) translate(6px,-8px)}
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input{font-family:inherit;color:inherit}
+::selection{background:var(--p1);color:#fff}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
+
+/* ===== NAV ===== */
+.nav{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(249,239,224,0.72);backdrop-filter:blur(24px) saturate(140%);border-bottom:1px solid rgba(0,170,184,0.08);z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 36px;gap:12px}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{font-family:var(--font-display);font-size:1.32rem;font-weight:700;letter-spacing:-.02em;background:linear-gradient(135deg,var(--p1),var(--p2),var(--p3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-tag{font-family:var(--font-display);font-size:.6rem;padding:3px 9px;border-radius:20px;background:var(--accent-bg);color:var(--p1);font-weight:600;letter-spacing:.1em}
+.nav-meta{display:flex;gap:20px;align-items:center;font-size:.78rem;color:var(--t2);font-weight:500}
+.nav-meta .dot-live{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e;animation:pulse 1.33s ease-in-out infinite;margin-right:6px;display:inline-block;vertical-align:middle}
+.ai-settings-btn{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.65);border:1px solid rgba(0,170,184,0.14);color:#4a7075;transition:all .25s var(--ease-out);cursor:pointer}
+.ai-settings-btn:hover{background:#fff;color:#00AAB8;transform:rotate(45deg);border-color:rgba(0,170,184,0.3)}
+.ai-settings-btn svg{width:15px;height:15px}
+
+/* ===== HERO SECTION ===== */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;position:relative;overflow:hidden}
+.hero-inner{position:relative;z-index:5;max-width:720px;width:100%;text-align:center}
+
+/* ===== 全局梦幻粉色霓虹背景 ===== */
+.dream-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
+  background:linear-gradient(160deg,#fdf2f7 0%,#fce7ee 25%,#fdefec 55%,#faf0e8 80%,#fdf5f7 100%)}
+.dream-bg::before,.dream-bg::after{content:'';position:absolute;inset:0}
+/* 霓虹光带：底层，用 SVG 通过 z-index 叠加 */
+.neon-lines{position:absolute;inset:0;opacity:.55;filter:blur(.4px)}
+.neon-lines svg{width:100%;height:100%}
+.neon-lines path{fill:none;stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 0 8px rgba(79,194,200,.55)) drop-shadow(0 0 18px rgba(184,228,227,.35))}
+/* 光带流动动画 */
+@keyframes neon-drift-1{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(20px) translateY(-10px)}}
+@keyframes neon-drift-2{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(-15px) translateY(12px)}}
+.neon-path-1{animation:neon-drift-1 9.33s ease-in-out infinite}
+.neon-path-2{animation:neon-drift-2 12s ease-in-out infinite}
+
+/* 果冻方块：3D transform + 半透明粉色光泽 */
+.jelly-scene{position:absolute;inset:0;perspective:1000px;transform-style:preserve-3d}
+.jelly{position:absolute;width:80px;height:80px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(127,211,214,.55) 0%,rgba(79,194,200,.4) 40%,rgba(184,228,227,.3) 100%);
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:
+    inset 0 0 20px rgba(255,255,255,.4),
+    inset 6px -6px 20px rgba(79,194,200,.25),
+    inset -6px 6px 20px rgba(238,252,253,.5),
+    0 20px 40px rgba(79,194,200,.2),
+    0 0 30px rgba(79,194,200,.3);
+  backdrop-filter:blur(10px);
+  transform-style:preserve-3d;
+  transition:filter .6s
+}
+/* 高光反射 */
+.jelly::before{content:'';position:absolute;top:8%;left:10%;width:35%;height:28%;border-radius:4px;
+  background:linear-gradient(135deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,0) 100%);filter:blur(2px);opacity:.85}
+/* 内部深色透视 */
+.jelly::after{content:'';position:absolute;right:6%;bottom:8%;width:45%;height:35%;border-radius:3px;
+  background:linear-gradient(135deg,rgba(79,194,200,.3) 0%,rgba(79,194,200,.1) 100%);filter:blur(3px)}
+
+/* 大中小不同尺寸+位置+旋转+漂浮节奏 */
+.j1{width:180px;height:180px;top:38%;left:42%;animation:jelly-float-a 6s ease-in-out infinite;transform:rotate(8deg) scale(1)}
+.j2{width:92px;height:92px;top:22%;left:58%;animation:jelly-float-b 7.33s ease-in-out infinite;transform:rotate(-12deg)}
+.j3{width:70px;height:70px;top:50%;left:28%;animation:jelly-float-c 5.33s ease-in-out infinite;transform:rotate(20deg)}
+.j4{width:60px;height:60px;top:68%;left:62%;animation:jelly-float-a 6.67s ease-in-out infinite 1s;transform:rotate(-5deg)}
+.j5{width:55px;height:55px;top:18%;left:12%;animation:jelly-float-b 8s ease-in-out infinite 2s;transform:rotate(15deg)}
+.j6{width:48px;height:48px;top:75%;left:20%;animation:jelly-float-c 6s ease-in-out infinite .5s;transform:rotate(-22deg)}
+.j7{width:42px;height:42px;top:30%;left:80%;animation:jelly-float-a 7.33s ease-in-out infinite 1.5s;transform:rotate(10deg)}
+.j8{width:38px;height:38px;top:62%;left:8%;animation:jelly-float-b 5.33s ease-in-out infinite;transform:rotate(-8deg)}
+.j9{width:36px;height:36px;top:82%;left:75%;animation:jelly-float-c 6.67s ease-in-out infinite 2s;transform:rotate(25deg)}
+.j10{width:32px;height:32px;top:42%;left:72%;animation:jelly-float-a 6s ease-in-out infinite 3s;transform:rotate(-18deg)}
+
+@keyframes jelly-float-a{
+  0%,100%{transform:translateY(0) translateX(0) rotate(8deg)}
+  50%{transform:translateY(-24px) translateX(8px) rotate(12deg)}
+}
+@keyframes jelly-float-b{
+  0%,100%{transform:translateY(0) translateX(0) rotate(-12deg)}
+  50%{transform:translateY(18px) translateX(-12px) rotate(-8deg)}
+}
+@keyframes jelly-float-c{
+  0%,100%{transform:translateY(0) translateX(0) rotate(20deg)}
+  33%{transform:translateY(-16px) translateX(10px) rotate(24deg)}
+  66%{transform:translateY(12px) translateX(-8px) rotate(16deg)}
+}
+
+/* 顶部&底部霓虹灯带 */
+.neon-strip{position:absolute;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent 0%,#4FC2C8 20%,#ffb4dd 50%,#4FC2C8 80%,transparent 100%);
+  box-shadow:0 0 20px #4FC2C8,0 0 40px rgba(0,170,184,.5);animation:strip-pulse 2.67s ease-in-out infinite}
+.neon-strip-top{top:0}
+.neon-strip-bot{bottom:0}
+@keyframes strip-pulse{0%,100%{opacity:.5}50%{opacity:.9}}
+
+/* Big circles: slow drift + breathe */
+@keyframes drift1{
+  0%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(-30px,20px) scale(1.05)}
+  50%{transform:translate(-15px,40px) scale(0.98)}
+  75%{transform:translate(20px,15px) scale(1.03)}
+  100%{transform:translate(10px,-10px) scale(1)}
+}
+@keyframes drift2{
+  0%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-25px) scale(1.06)}
+  66%{transform:translate(15px,-40px) scale(0.96)}
+  100%{transform:translate(-20px,10px) scale(1.02)}
+}
+/* Squares: slow spin + drift */
+@keyframes spin-drift{
+  0%{transform:rotate(25deg) translate(0,0)}
+  25%{transform:rotate(115deg) translate(15px,-20px)}
+  50%{transform:rotate(205deg) translate(-10px,15px)}
+  75%{transform:rotate(295deg) translate(20px,10px)}
+  100%{transform:rotate(385deg) translate(0,0)}
+}
+@keyframes spin-drift-r{
+  0%{transform:rotate(-15deg) translate(0,0)}
+  25%{transform:rotate(-105deg) translate(-20px,15px)}
+  50%{transform:rotate(-195deg) translate(10px,-20px)}
+  75%{transform:rotate(-285deg) translate(-15px,-10px)}
+  100%{transform:rotate(-375deg) translate(0,0)}
+}
+/* Small dots: lively bob */
+@keyframes bob{
+  0%,100%{transform:translateY(0) scale(1)}
+  30%{transform:translateY(-25px) scale(1.1)}
+  60%{transform:translateY(10px) scale(0.95)}
+}
+/* Rings: rotation */
+@keyframes ring-spin{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+
+.hero-inner{text-align:center;max-width:820px;width:100%;position:relative;z-index:1;padding:44px 56px 48px;
+  /* 中央舞台蒙版：高斯模糊玻璃卡片，让四周粘土装饰透出柔和光晕 */
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(32px) saturate(150%);
+  -webkit-backdrop-filter:blur(32px) saturate(150%);
+  border:1px solid rgba(255,255,255,0.9);
+  border-radius:40px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.95) inset,
+    0 0 0 1px rgba(255,255,255,0.4) inset,
+    0 30px 80px -20px rgba(0,170,184,0.18),
+    0 12px 32px -6px rgba(100,160,165,0.12),
+    0 0 0 1px rgba(0,170,184,0.06);
+}
+/* 蒙版装饰高光：左上角微光 */
+.hero-inner::before{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(255,255,255,0.7) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 85% 100%, rgba(184,228,227,0.35) 0%, transparent 70%);
+  opacity:.8;z-index:-1}
+@keyframes stage-float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+@media (max-width:768px){
+  .hero-inner{padding:44px 24px 48px;border-radius:28px;max-width:calc(100% - 32px)}
+  .hero-title-minimal{font-size:clamp(1.8rem,6vw,2.4rem)}
+}
+
+/* ===== Dribbble Pro 极简风 Hero ===== */
+.hero-chip-top{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;margin-bottom:32px;
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(26,26,34,0.08);
+  border-radius:100px;
+  font-family:var(--font-display);font-size:.72rem;font-weight:600;
+  letter-spacing:.12em;color:#4a4a55;
+  animation:hero-fade-up .5.33s cubic-bezier(0.16,1,0.3,1) both;
+}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,0.5);animation:pulse-dot 1.33s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.15)}}
+.hero-title-minimal{
+  font-family:var(--font-display),'Noto Sans SC','PingFang SC',sans-serif;
+  font-weight:800;
+  line-height:1.15;
+  letter-spacing:-.04em;
+  color:#0f2a2d;
+  margin-bottom:28px;
+  /* 柔和立体阴影：浅青光晕 + 深色投影，让字"浮"在玻璃蒙版上 */
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.8),
+    0 2px 4px rgba(255,255,255,0.6),
+    0 8px 24px rgba(0,170,184,0.18),
+    0 4px 12px rgba(15,42,45,0.12);
+  animation:hero-fade-up .6s cubic-bezier(0.16,1,0.3,1) both;
+}
+/* 第一行：小字（副标题） */
+.hero-title-minimal .htm-sub{
+  display:inline-block;
+  font-size:clamp(1.6rem,2.6vw,2.3rem);
+  font-weight:700;
+  color:#0f2a2d;
+  letter-spacing:.02em;
+  margin-bottom:10px;
+  text-shadow:0 1px 0 rgba(255,255,255,0.8),0 2px 6px rgba(0,170,184,0.12);
+}
+/* 第二行：大字（主视觉） */
+.hero-title-minimal .htm-main{
+  display:inline-block;
+  font-size:clamp(2.6rem,5.6vw,5rem);
+  font-weight:800;
+  letter-spacing:-.045em;
+}
+.hero-title-minimal em{
+  font-family:var(--font-display),'Noto Sans SC','PingFang SC',sans-serif;
+  font-style:normal;font-weight:800;
+  color:#00AAB8;
+  padding:0 6px;
+  /* em 独立阴影：青色光晕发光效果，突出"30 秒" */
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.8),
+    0 4px 12px rgba(0,170,184,0.3),
+    0 8px 24px rgba(0,170,184,0.2);
+}
+
+.search-box-minimal{
+  max-width:620px;margin:0 auto;
+  display:flex;align-items:stretch;gap:0;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(26,26,34,0.08);
+  border-radius:100px;
+  padding:8px 8px 8px 28px;
+  box-shadow:0 4px 24px rgba(26,26,34,0.06),0 1px 3px rgba(26,26,34,0.03);
+  transition:all .35s cubic-bezier(0.16,1,0.3,1);
+  animation:hero-fade-up 0.67s cubic-bezier(0.16,1,0.3,1) .15s both;
+}
+.search-box-minimal:focus-within{
+  box-shadow:0 8px 40px rgba(0,170,184,0.16),0 2px 8px rgba(26,26,34,0.04);
+  border-color:rgba(0,170,184,0.25);
+}
+.search-input-minimal{
+  flex:1;background:none;border:none;outline:none;
+  font-family:var(--font-body);
+  font-size:1rem;
+  color:#1a1a22;
+  padding:14px 0;letter-spacing:-.005em;
+}
+.search-input-minimal::placeholder{color:#9898a8;font-weight:400}
+.search-btn-minimal{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#1a1a22;color:#fff;
+  font-family:var(--font-display);
+  font-size:.92rem;font-weight:500;
+  padding:14px 26px;border:none;cursor:pointer;
+  border-radius:100px;letter-spacing:-.005em;
+  transition:all .3s cubic-bezier(0.16,1,0.3,1);
+}
+.search-btn-minimal:hover{background:#000;transform:scale(1.03);box-shadow:0 6px 20px rgba(0,0,0,0.25)}
+.search-btn-minimal svg{transition:transform .3s}
+.search-btn-minimal:hover svg{transform:translateX(3px)}
+
+.hero-quote{
+  margin-top:40px;max-width:560px;margin-left:auto;margin-right:auto;
+  animation:hero-fade-up 0.73s cubic-bezier(0.16,1,0.3,1) .4s both;
+}
+.hero-quote p{
+  font-family:var(--font-serif),'Noto Serif SC',serif;
+  font-style:italic;
+  font-size:1rem;
+  line-height:1.7;
+  color:#5a5a65;
+  letter-spacing:-.01em;
+  margin-bottom:10px;
+}
+.hero-quote-author{
+  font-family:var(--font-body);
+  font-size:.82rem;
+  color:#9898a8;
+  font-weight:500;
+}
+
+/* 热门搜索 chip 组 */
+.hero-hot-chips{
+  margin-top:28px;
+  display:flex;align-items:center;gap:10px;
+  animation:hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) .3s both;
+}
+.hot-label{
+  font-family:var(--font-display);
+  font-size:.72rem;font-weight:600;
+  color:#7a7a85;letter-spacing:.1em;
+  margin-right:8px;flex-shrink:0;
+}
+.hot-chip{
+  font-family:var(--font-body);
+  font-size:.88rem;font-weight:500;
+  color:#2a2a35;
+  background:rgba(255,255,255,0.78);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(26,26,34,0.1);
+  padding:10px 14px;border-radius:14px;
+  cursor:pointer;transition:all .25s cubic-bezier(0.16,1,0.3,1);
+  letter-spacing:-.005em;
+  flex:1;min-width:0;text-align:center;
+  box-shadow:0 2px 8px rgba(0,170,184,0.06);
+}
+.hot-chip:hover{
+  background:#1a1a22;color:#fff;border-color:#1a1a22;
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(26,26,34,0.2);
+}
+
+/* 底部跑马灯 */
+.hero-marquee{
+  position:absolute;left:0;right:0;bottom:40px;
+  overflow:hidden;pointer-events:none;
+  mask-image:linear-gradient(90deg,transparent 0%,#000 15%,#000 85%,transparent 100%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 15%,#000 85%,transparent 100%);
+  opacity:.5;
+  animation:hero-fade-up 0.8s cubic-bezier(0.16,1,0.3,1) .5s both;
+}
+.marquee-track{
+  display:inline-flex;gap:24px;align-items:center;
+  white-space:nowrap;
+  font-family:var(--font-serif),'Noto Serif SC',serif;
+  font-style:italic;font-size:1.4rem;
+  color:#8a7582;letter-spacing:-.01em;
+  animation:marquee-scroll 40s linear infinite;
+}
+.marquee-track span{display:inline-block;flex-shrink:0}
+@keyframes marquee-scroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+
+@keyframes hero-fade-up{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@media (max-width:640px){
+  .search-box-minimal{flex-direction:column;border-radius:24px;padding:8px}
+  .search-input-minimal{padding:16px 20px;text-align:center}
+  .search-btn-minimal{width:100%;justify-content:center;padding:16px}
+  .hero-quote{margin-top:56px}
+}
+
+/* ===== END 极简风 ===== */
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 18px 7px 10px;border-radius:24px;
+  background:rgba(255,255,255,0.75);backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(0,170,184,0.14);
+  font-family:var(--font-display);font-size:.76rem;font-weight:500;color:var(--p1);margin-bottom:32px;letter-spacing:.02em;
+  box-shadow:0 4px 24px rgba(0,170,184,0.06);animation:badgeFloat 2.67s ease-in-out infinite}
+.hero-badge .badge-chip{background:linear-gradient(135deg,var(--p1),var(--p3));color:#fff;padding:2px 9px;border-radius:14px;font-size:.64rem;font-weight:700;letter-spacing:.06em}
+.hero-badge .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--p1);animation:pulse 1.33s ease-in-out infinite;display:inline-block}
+@keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+.hero-title{font-family:var(--font-display);font-size:3.4rem;font-weight:700;line-height:1.08;margin-bottom:36px;letter-spacing:-.035em;text-align:center}
+.hero-title .row{display:block}
+.hero-title .row1{background:linear-gradient(135deg,#1a1a22 0%,#3a2a4a 50%,#2a1a3a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-title .hl{background:linear-gradient(100deg,var(--p1) 0%,var(--p2) 25%,var(--p3) 50%,var(--p4) 75%,var(--p5) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:250% 100%;animation:gradShift 4s ease-in-out infinite}
+.hero-title .italic{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--text);letter-spacing:-.02em;padding:0 4px}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero-sub{font-size:1.08rem;color:var(--t2);line-height:1.75;margin-bottom:44px;max-width:580px;margin-left:auto;margin-right:auto;font-weight:400}
+.hero-sub b{color:var(--text);font-weight:600}
+
+/* Search box — premium liquid glass */
+.search-box{position:relative;max-width:640px;margin:0 auto}
+.search-box::before{content:'';position:absolute;inset:-2px;border-radius:22px;background:linear-gradient(135deg,var(--p1),var(--p3),var(--p5),var(--p1));background-size:300% 300%;opacity:0;transition:opacity .4s;z-index:0;animation:gradShift 4s ease-in-out infinite}
+.search-box:focus-within::before{opacity:.55}
+.search-input{position:relative;z-index:1;width:100%;padding:22px 72px 22px 56px;background:rgba(255,255,255,0.9);backdrop-filter:blur(20px) saturate(140%);border:1.5px solid rgba(255,255,255,0.7);border-radius:20px;font-size:1.02rem;font-weight:500;outline:none;transition:all .35s var(--ease-out);box-shadow:0 10px 40px rgba(0,170,184,0.06),inset 0 1px 0 rgba(255,255,255,0.8);font-family:var(--font-body)}
+.search-input:focus{background:rgba(255,255,255,0.96);box-shadow:0 20px 60px rgba(0,170,184,0.12),inset 0 1px 0 rgba(255,255,255,1)}
+.search-input::placeholder{color:var(--t3);font-weight:400}
+.search-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--t3);z-index:2;pointer-events:none;transition:color .25s}
+.search-box:focus-within .search-icon{color:var(--p1)}
+.search-btn{position:absolute;z-index:2;right:8px;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--p1),var(--p3));display:flex;align-items:center;justify-content:center;transition:all .3s var(--ease-elastic);box-shadow:0 6px 20px rgba(0,170,184,0.22),inset 0 1px 0 rgba(255,255,255,0.2)}
+.search-btn:hover{transform:translateY(-50%) scale(1.08);box-shadow:0 10px 30px rgba(0,170,184,0.32)}
+.search-btn:active{transform:translateY(-50%) scale(0.96)}
+.search-btn svg{color:#fff}
+.search-kbd{position:absolute;right:72px;top:50%;transform:translateY(-50%);z-index:2;font-family:var(--font-display);font-size:.66rem;padding:3px 8px;border-radius:6px;background:var(--s2);color:var(--t3);border:1px solid var(--border);letter-spacing:.05em;pointer-events:none}
+
+.hero-hint{margin-top:24px;font-size:.8rem;color:var(--t3);font-family:var(--font-display);letter-spacing:.04em}
+.hero-hint-tags{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:14px;padding:0 8px}
+.hero-hint-tag{flex:1;min-width:96px;padding:10px 14px;border-radius:14px;font-size:.82rem;font-weight:500;background:rgba(255,255,255,0.65);backdrop-filter:blur(10px);border:1px solid rgba(0,0,0,0.04);color:var(--t2);cursor:pointer;transition:all .25s var(--ease-out);text-align:center}
+.hero-hint-tag:hover{border-color:var(--p1);color:var(--p1);background:rgba(255,255,255,0.95);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,170,184,0.12)}
+
+/* Hero stats row — bento style */
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:720px;margin:56px auto 0;padding:0 16px}
+.stat-card{padding:22px 20px;background:rgba(255,255,255,0.55);backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(255,255,255,0.7);border-radius:18px;text-align:left;transition:all .35s var(--ease-out);box-shadow:0 4px 20px rgba(0,0,0,0.02);position:relative;overflow:hidden}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,170,184,0.08);border-color:rgba(0,170,184,0.2)}
+.stat-card::after{content:'';position:absolute;top:-40%;right:-40%;width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--p1),var(--p3));opacity:.04;filter:blur(30px)}
+.stat-num{font-family:var(--font-display);font-size:1.9rem;font-weight:700;letter-spacing:-.04em;line-height:1;margin-bottom:6px;background:linear-gradient(135deg,var(--p1),var(--p3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.72rem;color:var(--t2);font-weight:500;letter-spacing:.02em}
+.stat-card:nth-child(2) .stat-num{background:linear-gradient(135deg,var(--p3),var(--p4));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-card:nth-child(3) .stat-num{background:linear-gradient(135deg,var(--p4),var(--p5));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-card:nth-child(4) .stat-num{background:linear-gradient(135deg,var(--p5),var(--p2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ===== RESULTS SECTION (below hero, same page) ===== */
+.results-section{padding:100px 32px 80px;position:relative;display:none}
+.results-section.show{display:block}
+
+.results-header{max-width:1200px;margin:0 auto 32px}
+/* 返回按钮：抽出蒙版外，贴在左上角 */
+.rh-back-wrap{max-width:780px;margin:0 auto 14px;padding-left:4px}
+/* 大标题独立玻璃蒙版：收窄居中，不再满宽 */
+.rh-top{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;margin-bottom:28px;
+  max-width:780px;margin-left:auto;margin-right:auto;
+  padding:28px 40px;border-radius:28px;
+  background:rgba(255,255,255,0.6);
+  backdrop-filter:blur(26px) saturate(140%);
+  -webkit-backdrop-filter:blur(26px) saturate(140%);
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 16px 44px -14px rgba(0,170,184,0.16),
+    0 6px 16px -4px rgba(100,160,165,0.08)}
+.rh-back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px 8px 10px;
+  position:relative;z-index:10;
+  background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);
+  border:1px solid rgba(0,170,184,0.2);border-radius:100px;
+  font-family:var(--font-display),'Noto Sans SC',sans-serif;font-size:.8rem;font-weight:600;
+  color:#00606a;cursor:pointer;transition:all .25s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:0 2px 8px rgba(0,170,184,0.08)}
+.rh-back-btn:hover{background:#00AAB8;color:#fff;border-color:#00AAB8;transform:translateX(-2px);box-shadow:0 6px 16px rgba(0,170,184,0.3)}
+.rh-back-btn svg{transition:transform .25s}
+.rh-back-btn:hover svg{transform:translateX(-3px)}
+.rh-left{text-align:center}
+.rh-left h1{font-family:var(--font-display);font-size:clamp(2rem,4vw,2.8rem);font-weight:700;letter-spacing:-.035em;line-height:1.15;margin-bottom:0;text-align:center}
+.rh-left h1 span{background:linear-gradient(135deg,var(--p1),var(--p2),var(--p3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.rh-left h1 em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--t2);font-size:.75em;letter-spacing:-.02em}
+.rh-left p{font-family:var(--font-display);font-size:.82rem;color:var(--t2);margin-top:10px;letter-spacing:.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rh-left p .chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(255,255,255,0.7);border:1px solid rgba(0,170,184,0.12);border-radius:12px;font-size:.74rem;color:var(--p1);font-weight:500}
+.rh-left p .chip svg{width:11px;height:11px}
+
+/* Category pills — refined */
+.rh-cats{display:flex;gap:6px;flex-wrap:wrap}
+.rh-pill{font-family:var(--font-display);padding:8px 18px;border-radius:22px;font-size:.8rem;font-weight:500;background:rgba(255,255,255,0.7);backdrop-filter:blur(10px);border:1px solid rgba(0,0,0,0.05);color:var(--t2);cursor:pointer;transition:all .3s var(--ease-out);letter-spacing:.01em}
+.rh-pill:hover{border-color:rgba(0,170,184,0.3);color:var(--p1);transform:translateY(-1px)}
+.rh-pill.active{border-color:transparent;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p3));box-shadow:0 6px 20px rgba(0,170,184,0.22),inset 0 1px 0 rgba(255,255,255,0.2)}
+
+/* ===== KEYWORD CARDS ===== */
+/* 关键词区标题 + 分类 pill 整合到一个玻璃蒙版卡内 */
+.kw-section-title{max-width:1200px;margin:0 auto 28px;padding:22px 28px 20px;position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr auto;grid-template-areas:"head meta" "cats cats";gap:18px 20px;
+  align-items:center;
+  border-radius:24px;
+  background:rgba(255,255,255,0.6);
+  backdrop-filter:blur(26px) saturate(140%);
+  -webkit-backdrop-filter:blur(26px) saturate(140%);
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 16px 44px -14px rgba(0,170,184,0.16),
+    0 6px 16px -4px rgba(100,160,165,0.08)}
+.kw-section-title .kst-left{grid-area:head}
+.kw-section-title .kst-meta{grid-area:meta;text-align:right}
+.kw-section-title .rh-cats{grid-area:cats;margin:0;padding-top:14px;border-top:1px dashed rgba(0,170,184,0.18)}
+@media (max-width:640px){
+  .kw-section-title{grid-template-columns:1fr;grid-template-areas:"head" "meta" "cats";padding:20px}
+  .kw-section-title .kst-meta{text-align:left}
+}
+.kw-section-title .kst-left{display:flex;align-items:center;gap:14px}
+.kw-section-title .num{font-family:var(--font-display);font-size:2.4rem;font-weight:700;color:#00AAB8;letter-spacing:-.03em;line-height:1;
+  text-shadow:0 1px 0 rgba(255,255,255,0.8),0 4px 12px rgba(0,170,184,0.25)}
+.kw-section-title h2{font-family:var(--font-display),'Noto Sans SC',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:#0f2a2d;line-height:1;
+  text-shadow:0 1px 0 rgba(255,255,255,0.7)}
+.kw-section-title h2 em{font-style:normal;color:#4FC2C8;font-weight:600;font-size:.88rem;margin-left:8px}
+.kw-section-title .kst-meta{font-family:var(--font-display);font-size:.8rem;color:var(--t2);letter-spacing:.02em;text-shadow:0 1px 0 rgba(255,255,255,0.6)}
+.kw-section-title .kst-meta span{color:#00AAB8;font-weight:600}
+@media (max-width:640px){
+  .kw-section-title .num{font-size:1.8rem}
+  .kw-section-title h2{font-size:1.15rem}
+}
+
+.kw-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+
+/* ===== 行业标杆三强组件 ===== */
+.top3-section{max-width:1200px;margin:0 auto 48px;padding:36px;border-radius:32px;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(28px) saturate(140%);
+  -webkit-backdrop-filter:blur(28px) saturate(140%);
+  border:1px solid rgba(255,255,255,0.85);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 20px 60px -12px rgba(0,170,184,0.14),
+    0 8px 24px -4px rgba(100,160,165,0.08),
+    0 0 0 1px rgba(0,170,184,0.06);
+  position:relative;overflow:hidden}
+.top3-section::before{content:'';position:absolute;top:-120px;right:-120px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(0,170,184,0.06),transparent 70%);pointer-events:none}
+.top3-section::after{content:'';position:absolute;bottom:-120px;left:-120px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(184,228,227,0.05),transparent 70%);pointer-events:none}
+.top3-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px;position:relative;z-index:1}
+.top3-title{display:flex;align-items:center;gap:14px}
+.top3-title .num{font-family:var(--font-display);font-size:2.4rem;font-weight:700;background:linear-gradient(135deg,#00AAB8 0%,#4FC2C8 30%,#7FD3D6 55%,#B8E4E3 80%,#E6F4F1 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.03em;line-height:1}
+/* 分区图标容器：取代之前的"03"/"40"数字 */
+.sect-icon{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(0,170,184,0.1) 0%,rgba(79,194,200,0.06) 100%);
+  border:1px solid rgba(0,170,184,0.15);
+  box-shadow:0 4px 12px rgba(0,170,184,0.12),inset 0 1px 0 rgba(255,255,255,0.8);flex-shrink:0}
+.sect-icon svg{width:26px;height:26px}
+.top3-title h2{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:#2a2a35;letter-spacing:-.02em}
+.top3-title h2 em{font-style:normal;background:linear-gradient(135deg,#00AAB8,#7FD3D6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;font-size:.95rem;margin-left:8px}
+.top3-sub{font-size:.82rem;color:#6a5560;letter-spacing:.01em;font-weight:500}
+.top3-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;z-index:1}
+
+.cmp-card{background:linear-gradient(180deg,#ffffff,#fdf9fb);
+  border:1px solid rgba(0,170,184,0.1);border-radius:20px;padding:24px;
+  transition:all .4s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden;
+  opacity:0;transform:translateY(18px);
+  box-shadow:0 1px 3px rgba(0,0,0,0.02)}
+.top3-section.show .cmp-card{opacity:1;transform:translateY(0)}
+.top3-section.show .cmp-card:nth-child(1){transition-delay:.05s}
+.top3-section.show .cmp-card:nth-child(2){transition-delay:.15s}
+.top3-section.show .cmp-card:nth-child(3){transition-delay:.25s}
+.cmp-card::before{content:'';position:absolute;top:-60px;right:-60px;width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,170,184,0.22),transparent 70%);pointer-events:none;transition:all .4s ease;opacity:.7}
+.cmp-card::after{content:'';position:absolute;bottom:-40px;left:-40px;width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,228,227,0.28),transparent 70%);pointer-events:none;transition:all .4s ease;opacity:.6}
+.cmp-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,170,184,0.1),0 4px 12px rgba(79,194,200,0.06);border-color:rgba(0,170,184,0.18)}
+.cmp-card:hover::before{opacity:1;transform:scale(1.2)}
+.cmp-card:hover::after{opacity:1;transform:scale(1.15)}
+
+.cmp-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;position:relative;z-index:1}
+.cmp-logo{width:44px;height:44px;border-radius:12px;background:#fff;padding:6px;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,170,184,0.08);display:flex;align-items:center;justify-content:center;overflow:hidden;
+  border:1px solid rgba(255,255,255,0.9)}
+.cmp-logo img{width:100%;height:100%;object-fit:contain}
+.cmp-logo .fallback{font-family:var(--font-display);font-weight:700;font-size:1rem;background:linear-gradient(135deg,#00AAB8,#7FD3D6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cmp-name-wrap{flex:1;min-width:0}
+.cmp-name{font-family:var(--font-display);font-size:1.12rem;font-weight:700;color:#1f1f2a;letter-spacing:-.015em;line-height:1.2;margin-bottom:2px}
+.cmp-en{font-size:.74rem;color:#9a8590;letter-spacing:.02em;font-weight:500}
+.cmp-niche{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;
+  font-size:.7rem;font-weight:600;letter-spacing:.02em;
+  background:linear-gradient(135deg,rgba(0,170,184,0.14),rgba(184,228,227,0.16));
+  color:#006a75;border:1px solid rgba(0,170,184,0.22);margin-top:4px;white-space:nowrap}
+.cmp-niche svg{width:10px;height:10px;stroke-width:2}
+
+.cmp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;position:relative;z-index:1}
+.cmp-tag{font-size:.7rem;padding:3px 10px;border-radius:6px;background:rgba(255,255,255,0.7);
+  border:1px solid rgba(0,170,184,0.14);color:#5a4a55;letter-spacing:.01em;font-weight:600}
+
+.cmp-moat{margin-bottom:16px;position:relative;z-index:1}
+.cmp-section-label{display:flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:.7rem;
+  font-weight:700;background:linear-gradient(135deg,#00AAB8,#4FC2C8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.cmp-section-label svg{width:12px;height:12px;stroke-width:2;stroke:#00AAB8;flex-shrink:0}
+.cmp-moat-pro{font-size:.84rem;line-height:1.7;color:#2a2530;letter-spacing:-.005em;margin-bottom:10px;font-weight:500}
+.cmp-moat-ez{font-size:.8rem;line-height:1.7;color:#1a3538;letter-spacing:.005em;padding:11px 14px;
+  background:linear-gradient(135deg,rgba(230,244,241,0.85),rgba(219,243,244,0.8));border-radius:10px}
+.cmp-moat-ez::before{content:'白话: ';font-weight:700;background:linear-gradient(135deg,#B8E4E3,#E6F4F1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+.cmp-life{margin-bottom:18px;position:relative;z-index:1}
+.cmp-life-track{position:relative;margin:10px 4px 14px;padding-top:8px}
+/* 底部连接线 */
+.cmp-life-track::before{content:'';position:absolute;left:8px;right:8px;top:14px;height:1.5px;
+  background:linear-gradient(90deg,rgba(0,170,184,0.15),rgba(79,194,200,0.2),rgba(184,228,227,0.2),rgba(200,200,210,0.18))}
+.cmp-life-stages{display:flex;justify-content:space-between;position:relative}
+.cmp-life-stage{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;position:relative;z-index:1}
+.cmp-life-stage .dot{width:10px;height:10px;border-radius:50%;background:#fff;border:1.5px solid rgba(200,200,210,0.4);
+  transition:all .4s ease}
+.cmp-life-stage .label{font-size:.68rem;color:#a8a0a8;letter-spacing:.02em;font-weight:500;white-space:nowrap;transition:all .3s}
+.cmp-life-stage.active .dot{width:14px;height:14px;margin-top:-2px;background:linear-gradient(135deg,#00AAB8,#4FC2C8);border-color:#fff;
+  box-shadow:0 0 0 3px rgba(0,170,184,0.18),0 4px 10px rgba(0,170,184,0.35)}
+.cmp-life-stage.active .label{font-weight:700;font-size:.72rem;
+  background:linear-gradient(135deg,#00AAB8,#4FC2C8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cmp-life-stage.done .dot{background:linear-gradient(135deg,rgba(0,170,184,0.5),rgba(79,194,200,0.5));border-color:#fff}
+
+.cmp-rev{position:relative;z-index:1}
+.cmp-rev-item{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.cmp-rev-label{font-size:.76rem;color:#3a3540;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.005em;font-weight:500}
+.cmp-rev-bar-wrap{flex:1.2;height:6px;background:rgba(0,170,184,0.08);border-radius:3px;overflow:hidden;position:relative}
+.cmp-rev-bar{height:100%;border-radius:3px;transition:width .8s cubic-bezier(0.16,1,0.3,1);width:0}
+.top3-section.show .cmp-rev-bar{width:var(--w,0%)}
+.cmp-rev-pct{font-family:var(--font-display);font-size:.78rem;font-weight:700;color:#1f1f2a;width:40px;text-align:right;letter-spacing:-.01em}
+
+.cmp-visit{display:inline-flex;align-items:center;gap:6px;margin-top:18px;padding:9px 16px;border-radius:10px;
+  background:linear-gradient(135deg,#00AAB8 0%,#4FC2C8 50%,#7FD3D6 100%);color:#fff;
+  font-size:.8rem;font-weight:600;text-decoration:none;letter-spacing:.01em;transition:all .3s ease;position:relative;z-index:1;
+  box-shadow:0 4px 12px rgba(0,170,184,0.25)}
+.cmp-visit:hover{transform:translateX(3px) translateY(-1px);box-shadow:0 8px 20px rgba(0,170,184,0.4);background:linear-gradient(135deg,#00AAB8 0%,#7FD3D6 50%,#B8E4E3 100%)}
+.cmp-visit svg{width:12px;height:12px;stroke-width:2.5;stroke:#fff}
+.cmp-visit:hover svg{transform:translate(2px,-2px)}
+
+@media (max-width:960px){
+  .top3-grid{grid-template-columns:1fr}
+  .top3-section{padding:24px;border-radius:20px}
+}
+.kw-card{position:relative;background:#fff;border-radius:18px;overflow:hidden;transition:all .4s var(--ease-out);box-shadow:0 1px 2px rgba(0,0,0,0.03),0 2px 8px rgba(0,170,184,0.04);border:1px solid rgba(0,170,184,0.08)}
+.kw-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#00AAB8,#4FC2C8,#7FD3D6,#B8E4E3,#E6F4F1);
+  opacity:0;transition:opacity .4s;transform-origin:left;transform:scaleX(.3);transition:opacity .4s,transform .5s var(--ease-out)}
+.kw-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,170,184,0.1),0 4px 12px rgba(79,194,200,0.06);border-color:rgba(0,170,184,0.16)}
+.kw-card:hover::before{opacity:1;transform:scaleX(1)}
+.kw-top{padding:22px 24px 4px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.kw-num{font-family:var(--font-display);font-size:.62rem;font-weight:700;letter-spacing:.06em;padding:5px 10px;
+  background:linear-gradient(135deg,rgba(0,170,184,0.08),rgba(184,228,227,0.1));color:#006a75;border-radius:20px;
+  flex-shrink:0;white-space:nowrap;border:1px solid rgba(0,170,184,0.12)}
+.kw-name{font-family:var(--font-display);font-size:1.15rem;font-weight:700;flex:1;letter-spacing:-.02em;line-height:1.35;color:#1f1f2a}
+.kw-name mark{background:linear-gradient(180deg,transparent 58%,rgba(0,170,184,0.3) 58%);color:inherit;font-weight:700;padding:0 2px}
+.kw-body{padding:12px 24px 24px}
+.kw-section{margin-bottom:14px}
+.kw-section:last-child{margin-bottom:0}
+.kw-label{font-family:var(--font-display);font-size:.66rem;font-weight:700;letter-spacing:.14em;margin-bottom:9px;display:flex;align-items:center;gap:7px;text-transform:uppercase}
+.kw-label-pro{color:#006a75}
+.kw-label-ez{color:#d47e52}
+.kw-label .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 2px #fff}
+.kw-label .dot.pro{background:linear-gradient(135deg,#00AAB8,#4FC2C8)}
+.kw-label .dot.ez{background:linear-gradient(135deg,#B8E4E3,#E6F4F1)}
+.kw-pro-text{font-size:.87rem;color:#3a3540;line-height:1.85;letter-spacing:-.005em}
+.kw-pro-text mark{background:linear-gradient(180deg,transparent 60%,rgba(0,170,184,0.2) 60%);color:#006a75;padding:0 2px;font-weight:600}
+/* ===== 外链跳查组（Google / Wikipedia / 百度百科） ===== */
+.kw-label-pro{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.kw-refs{
+  display:inline-flex;gap:6px;align-items:center;
+  padding:5px 6px 5px 10px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(0,170,184,0.1),rgba(79,194,200,0.06));
+  border:1px solid rgba(0,170,184,0.2);
+}
+.kw-refs-label{
+  font-size:.65rem;font-weight:700;color:#00606a;letter-spacing:.04em;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.kw-refs-label::before{
+  content:'🔎';font-size:.78rem;
+}
+.kw-ref{
+  height:22px;padding:0 9px;border-radius:6px;
+  display:inline-flex;align-items:center;gap:4px;
+  background:#fff;border:1px solid rgba(0,170,184,0.3);
+  color:#00606a;font-size:.7rem;font-weight:700;letter-spacing:.02em;
+  cursor:pointer;transition:all .2s cubic-bezier(0.16,1,0.3,1);
+  text-decoration:none;font-family:var(--font-display),sans-serif;
+}
+.kw-ref::after{
+  content:'↗';font-size:.72rem;opacity:.7;margin-left:1px;
+}
+.kw-ref:hover{background:#00AAB8;color:#fff;border-color:#00AAB8;transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,170,184,0.35)}
+.kw-ref:hover::after{opacity:1}
+/* 小屏隐藏 label 文字 */
+@media(max-width:520px){
+  .kw-refs{padding:4px 4px 4px 8px}
+  .kw-refs-label{font-size:.6rem}
+  .kw-refs-label::before{font-size:.72rem}
+  .kw-ref{padding:0 6px;font-size:.66rem}
+}
+.kw-ez-text{position:relative;font-size:.88rem;color:#1a3538;line-height:1.85;
+  background:linear-gradient(135deg,rgba(184,228,227,0.35) 0%,rgba(230,244,241,0.4) 100%);
+  padding:14px 18px 14px 20px;border-radius:12px;letter-spacing:-.005em}
+.kw-ez-text::before{content:'"';position:absolute;left:6px;top:-2px;font-family:var(--font-serif);font-size:1.8rem;color:#B8E4E3;opacity:.5;line-height:1}
+.kw-ez-text mark{background:rgba(79,194,200,0.3);color:#00606a;padding:1px 4px;border-radius:3px;font-weight:600}
+
+/* Category color strips (hidden - 极简风格) */
+.kw-strip{display:none}
+
+/* ===== RESULTS FLOATING DECOS ===== */
+.results-decos{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.rd{position:absolute;border-radius:50%;opacity:0;transition:opacity 1s}
+.results-section.show .rd{opacity:1}
+.rd-1{width:300px;height:300px;top:5%;right:-80px;background:linear-gradient(135deg,#fad4e3,#fce0d6);opacity:.35;animation:drift1 14.67s ease-in-out infinite alternate;filter:blur(2px)}
+.rd-2{width:200px;height:200px;top:30%;left:-60px;background:linear-gradient(135deg,#fce8d6,#f0f6e0);opacity:.3;animation:drift2 18.67s ease-in-out infinite alternate;filter:blur(2px)}
+.rd-3{width:120px;height:120px;border-radius:30px;top:55%;right:8%;background:linear-gradient(135deg,#fbe8c4,#faf1de);opacity:.32;animation:spin-drift 23.33s linear infinite;filter:blur(1px)}
+.rd-4{width:80px;height:80px;top:15%;left:15%;background:#fbd6de;opacity:.35;animation:bob 5.33s ease-in-out infinite;filter:blur(1px)}
+.rd-5{width:50px;height:50px;top:70%;right:18%;background:#fbe8c4;opacity:.3;animation:bob 4s ease-in-out infinite reverse;filter:blur(1px)}
+.rd-6{width:160px;height:160px;border-radius:50%;bottom:10%;left:20%;border:1px solid #f0bcd4;background:none;opacity:.32;animation:ring-spin 13.33s linear infinite,bob 10s ease-in-out infinite}
+.rd-7{width:100px;height:100px;border-radius:50%;top:42%;right:25%;border:1px solid #f2d4b4;background:none;opacity:.3;animation:ring-spin 10.67s linear infinite reverse,bob 7s ease-in-out infinite}
+.rd-8{width:35px;height:35px;top:85%;left:45%;background:#fce0d6;opacity:.35;animation:bob 3.33s ease-in-out infinite;filter:blur(1px)}
+
+/* ===== SCROLL REVEAL ===== */
+.scroll-reveal{opacity:0;transform:translateY(30px);transition:opacity .6s cubic-bezier(0.16,1,0.3,1),transform .6s cubic-bezier(0.16,1,0.3,1)}
+.scroll-reveal.revealed{opacity:1;transform:translateY(0)}
+
+/* ===== FLOATING PARTICLES (tiny sparkles) ===== */
+@keyframes float-particle{
+  0%{transform:translateY(0) scale(1);opacity:.25}
+  50%{transform:translateY(-40px) scale(1.2);opacity:.12}
+  100%{transform:translateY(0) scale(1);opacity:.25}
+}
+.particle{position:absolute;width:3px;height:3px;border-radius:50%;pointer-events:none;z-index:0}
+.particle:nth-child(1){background:#f0bcd4;top:20%;left:5%;animation:float-particle 2.67s ease-in-out infinite}
+.particle:nth-child(2){background:#f2c8bc;top:40%;right:7%;animation:float-particle 3.33s ease-in-out infinite 1s}
+.particle:nth-child(3){background:#f2d4b4;top:60%;left:10%;animation:float-particle 4s ease-in-out infinite 2s}
+.particle:nth-child(4){background:#f0c8cc;top:80%;right:12%;animation:float-particle 3s ease-in-out infinite .5s}
+.particle:nth-child(5){background:#ead8b0;top:35%;left:50%;animation:float-particle 3.67s ease-in-out infinite 1.5s}
+.particle:nth-child(6){background:#dce4bc;top:75%;left:30%;animation:float-particle 2.53s ease-in-out infinite 0.8s}
+
+/* ===== FOOTER ===== */
+.site-footer{text-align:center;padding:60px 24px 40px;position:relative;z-index:1}
+.footer-divider{width:80px;height:2px;background:linear-gradient(90deg,var(--p1),var(--p3),var(--p5));margin:0 auto 28px;border-radius:2px;opacity:.3}
+.footer-logo{font-size:1.1rem;font-weight:700;background:linear-gradient(135deg,var(--p1),var(--p3),var(--p5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.footer-desc{font-size:.8rem;color:var(--t3);line-height:1.6;max-width:400px;margin:0 auto 16px}
+.footer-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.footer-tag{font-size:.7rem;padding:4px 12px;border-radius:16px;background:rgba(255,255,255,0.5);border:1px solid rgba(0,170,184,0.08);color:var(--t3);transition:all .2s}
+.footer-tag:hover{color:var(--p1);border-color:var(--p1)}
+.footer-copy{font-size:.72rem;color:var(--t3);opacity:.6}
+.footer-heart{display:inline-block;color:var(--p1);animation:heartbeat 1s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.15)}28%{transform:scale(1)}42%{transform:scale(1.1)}70%{transform:scale(1)}}
+
+/* Coming soon */
+.coming-soon{grid-column:1/-1;text-align:center;padding:80px 24px}
+.coming-icon{font-size:3rem;margin-bottom:20px;opacity:.7}
+.coming-title{font-size:1.5rem;font-weight:700;margin-bottom:12px}
+.coming-desc{color:var(--t2);font-size:.92rem;line-height:1.8;max-width:500px;margin:0 auto 32px}
+.coming-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.coming-tag{padding:8px 20px;border-radius:22px;font-size:.84rem;font-weight:500;cursor:pointer;background:#fff;border:1.5px solid var(--border);color:var(--t2);transition:all .25s}
+.coming-tag:hover{border-color:var(--p1);color:var(--p1)}
+.coming-note{color:var(--t3);font-size:.8rem}
+
+/* Loading overlay — 直接继承背景图，自己模糊成梦幻版 */
+.loading{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+  background:url(bg-clay.png) center/cover no-repeat fixed;
+}
+.loading::before{content:'';position:absolute;inset:0;
+  /* 模糊滤镜 + 青色叠加，完全压住原图的米黄底 */
+  backdrop-filter:blur(50px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter:blur(50px) saturate(180%) brightness(1.05);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(238,252,253,0.85) 0%, rgba(219,243,244,0.7) 50%, rgba(184,228,227,0.55) 100%);
+}
+.loading > .load-inner{position:relative;z-index:1}
+.loading.active{display:flex}
+.load-inner{text-align:center;max-width:440px;width:100%;padding:24px}
+/* ===== 精致 Loading 组件：透镜扫描球 ===== */
+.load-inner{text-align:center;max-width:460px;width:100%;padding:40px 32px}
+.load-orb{position:relative;width:140px;height:140px;margin:0 auto 36px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.75) 0%,rgba(255,255,255,0.4) 60%,transparent 100%);
+  box-shadow:
+    0 20px 50px -10px rgba(0,170,184,0.28),
+    0 8px 20px rgba(0,170,184,0.18),
+    0 2px 8px rgba(100,160,165,0.12),
+    inset 0 0 30px rgba(255,255,255,0.6),
+    inset 0 -6px 20px rgba(0,170,184,0.1)}
+.load-orb-rings{position:absolute;inset:0;width:100%;height:100%}
+.load-orb-rings .r-outer{transform-origin:60px 60px;animation:orb-ccw 6s linear infinite}
+.load-orb-rings .r-mid{transform-origin:60px 60px;animation:orb-cw 3s linear infinite}
+.load-orb-rings .r-ticks{transform-origin:60px 60px;animation:orb-ccw 9.33s linear infinite}
+@keyframes orb-cw{to{transform:rotate(360deg)}}
+@keyframes orb-ccw{to{transform:rotate(-360deg)}}
+
+.load-orb-lens{position:absolute;left:50%;top:50%;width:56px;height:56px;transform:translate(-50%,-50%);
+  animation:lens-pulse 1.47s ease-in-out infinite;z-index:2}
+.load-orb-lens svg{width:100%;height:100%;filter:drop-shadow(0 4px 16px rgba(0,170,184,0.45)) drop-shadow(0 2px 6px rgba(0,170,184,0.35))}
+@keyframes lens-pulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1)}
+  50%{transform:translate(-50%,-50%) scale(1.12)}
+}
+
+.load-orb-halo{position:absolute;inset:10px;border-radius:50%;
+  background:radial-gradient(circle, rgba(0,170,184,0.28) 0%, rgba(79,194,200,0.15) 40%, transparent 70%);
+  filter:blur(10px);animation:halo-breath 2s ease-in-out infinite}
+@keyframes halo-breath{
+  0%,100%{opacity:.7;transform:scale(.92)}
+  50%{opacity:1;transform:scale(1.08)}
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+@keyframes popIn{0%{opacity:0;transform:scale(.85) translateY(20px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+#invalidHint .ih-chip:hover{transform:translateY(-2px)!important;box-shadow:0 8px 20px rgba(0,170,184,0.35)!important}
+#invalidHint #ihClose:hover{background:rgba(0,170,184,0.08)!important;border-color:rgba(0,170,184,0.4)!important}
+
+.load-title{font-family:var(--font-display),'Noto Sans SC',sans-serif;font-size:1.18rem;font-weight:700;letter-spacing:-.01em;color:#0f2a2d;margin-bottom:14px;line-height:1.4;
+  text-shadow:0 1px 0 rgba(255,255,255,0.8),0 4px 12px rgba(0,170,184,0.18),0 2px 6px rgba(15,42,45,0.1)}
+.load-sub{font-size:.85rem;color:#4a7075;margin-bottom:32px;font-weight:500;line-height:1.7;
+  text-shadow:0 1px 0 rgba(255,255,255,0.7),0 2px 8px rgba(0,170,184,0.12)}
+.load-bar{height:4px;background:rgba(200,230,230,0.55);border-radius:3px;overflow:hidden;margin-bottom:28px;
+  box-shadow:0 2px 8px rgba(0,170,184,0.12),inset 0 1px 2px rgba(100,160,165,0.15)}
+.load-fill{height:100%;background:linear-gradient(90deg,#00AAB8,#1FB8C4,#4FC2C8);border-radius:3px;width:0;transition:width .4s;box-shadow:0 0 12px rgba(0,170,184,0.6),0 2px 6px rgba(0,170,184,0.3),inset 0 1px 0 rgba(255,255,255,0.4)}
+
+/* 三步骤指示灯 */
+.load-steps{display:flex;justify-content:center;gap:20px;font-size:.72rem;color:#8aa4a9;font-weight:500;margin-top:4px;flex-wrap:wrap}
+.load-step{display:inline-flex;align-items:center;gap:7px;opacity:.55;transition:opacity .3s,color .3s;
+  text-shadow:0 1px 0 rgba(255,255,255,0.7)}
+.load-step .ls-dot{width:7px;height:7px;border-radius:50%;background:#B8E4E3;transition:all .3s;flex-shrink:0;
+  box-shadow:0 1px 3px rgba(0,170,184,0.25),inset 0 1px 1px rgba(255,255,255,0.5)}
+.load-step.active{opacity:1;color:#00AAB8;text-shadow:0 1px 0 rgba(255,255,255,0.9),0 2px 6px rgba(0,170,184,0.2)}
+.load-step.active .ls-dot{background:#00AAB8;box-shadow:0 0 12px rgba(0,170,184,0.7),0 2px 4px rgba(0,170,184,0.4),inset 0 1px 1px rgba(255,255,255,0.3);animation:step-pulse 0.93s ease-in-out infinite}
+.load-step.done{opacity:.9;color:#4FC2C8;text-shadow:0 1px 0 rgba(255,255,255,0.7)}
+.load-step.done .ls-dot{background:#4FC2C8;box-shadow:0 2px 6px rgba(79,194,200,0.35),inset 0 1px 1px rgba(255,255,255,0.3);animation:none;width:11px;height:11px;position:relative}
+.load-step.done .ls-dot::after{content:'';position:absolute;left:3px;top:5px;width:4.5px;height:2.2px;border:solid #fff;border-width:0 0 1.7px 1.7px;transform:rotate(-45deg)}
+@keyframes step-pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.4);box-shadow:0 0 14px rgba(0,170,184,0.8)}
+}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .2.67s cubic-bezier(0.16,1,0.3,1) forwards;opacity:0}
+
+/* Responsive */
+@media(max-width:768px){
+  .hero-title{font-size:2.6rem}
+  .hero-sub{font-size:.98rem}
+  .hero-stats{grid-template-columns:repeat(2,1fr);gap:10px;margin-top:40px}
+  .stat-num{font-size:1.5rem}
+  .kw-grid{grid-template-columns:1fr}
+  .nav{padding:0 16px}
+  .nav-meta{display:none}
+  .results-section{padding:80px 16px 60px}
+  .rh-top{flex-direction:column;align-items:flex-start}
+  .rh-left h1{font-size:2.2rem}
+  .search-kbd{display:none}
+  .search-input{padding:18px 110px 18px 48px;font-size:.96rem}
+  /* —— 移动端搜索按钮收缩到单行右侧，不换行 —— */
+  .search-btn{width:auto!important;height:42px!important;right:6px!important;padding:0 16px!important;font-size:.85rem!important;border-radius:12px!important}
+  .search-btn span{display:none}  /* 只保留箭头 */
+  .search-btn svg{margin:0!important}
+  /* —— 热门 chip 组：横向滚动不挤压 —— */
+  .hero-hot-chips{
+    flex-wrap:nowrap;overflow-x:auto;gap:8px;
+    margin-top:20px;padding:4px 0 12px;
+    -webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;
+  }
+  .hero-hot-chips::-webkit-scrollbar{display:none}
+  .hot-label{font-size:.68rem;margin-right:4px}
+  .hot-chip{flex:none!important;white-space:nowrap;padding:8px 14px!important;font-size:.82rem!important;scroll-snap-align:start}
+}
+@media(max-width:420px){
+  .hero-title{font-size:2.1rem}
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .hero-hint-tag{font-size:.72rem;padding:5px 12px}
+  /* 超小屏：更紧凑的搜索按钮 */
+  .search-input{padding:16px 90px 16px 44px;font-size:.92rem}
+  .search-btn{height:38px!important;padding:0 12px!important;font-size:.78rem!important}
+  /* 外链按钮在小屏幕一直显示（mobile 没 hover） */
+  .kw-refs{opacity:1!important;transform:none!important}
+  .kw-ref{width:24px;height:24px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand" onclick="goHome()" style="cursor:pointer">
+    <span class="nav-logo">IndustryLens</span>
+    <span class="nav-tag">BETA</span>
+  </div>
+  <div class="nav-meta">
+    <span><span class="dot-live"></span>100+ 行业已索引</span>
+    <button class="ai-settings-btn" onclick="openAISettings()" title="AI 设置">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Single page: Hero + Search -->
+<section class="hero" id="heroSection">
+
+  <div class="hero-inner">
+    <div class="hero-chip-top">
+      <span class="chip-dot"></span>
+      <span>INDUSTRYLENS · 2026</span>
+    </div>
+
+    <h1 class="hero-title-minimal">
+      <span class="htm-sub">初识一个行业</span> <br><span class="htm-main">只需要 <em>30 秒</em></span>
+    </h1>
+
+    <div class="search-box-minimal">
+      <input type="text" class="search-input-minimal" id="searchInput" placeholder="输入一个行业、公司、或技术词...">
+      <button class="search-btn-minimal" onclick="doSearch()">
+        <span>开始探索</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- 热门搜索 chip 组 -->
+    <div class="hero-hot-chips">
+      <span class="hot-label">热门搜索</span>
+      <button class="hot-chip" onclick="quickSearch('智能驾驶')">智能驾驶</button>
+      <button class="hot-chip" onclick="quickSearch('AI芯片')">AI芯片</button>
+      <button class="hot-chip" onclick="quickSearch('医美')">医美</button>
+      <button class="hot-chip" onclick="quickSearch('新能源车')">新能源车</button>
+      <button class="hot-chip" onclick="quickSearch('具身智能')">具身智能</button>
+      <button class="hot-chip" onclick="quickSearch('脑机接口')">脑机接口</button>
+      <button class="hot-chip" onclick="quickSearch('web3')">web3</button>
+    </div>
+
+  </div>
+
+  <!-- 底部跑马灯：25 个真正独立的行业（已去重） -->
+  <div class="hero-marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>智能驾驶</span><span>·</span>
+      <span>AI芯片</span><span>·</span>
+      <span>新能源车</span><span>·</span>
+      <span>具身智能</span><span>·</span>
+      <span>脑机接口</span><span>·</span>
+      <span>医美</span><span>·</span>
+      <span>创新药</span><span>·</span>
+      <span>半导体</span><span>·</span>
+      <span>合成生物学</span><span>·</span>
+      <span>Chiplet</span><span>·</span>
+      <span>商业航天</span><span>·</span>
+      <span>量子计算</span><span>·</span>
+      <span>固态电池</span><span>·</span>
+      <span>人形机器人</span><span>·</span>
+      <span>企业级SaaS</span><span>·</span>
+      <span>云计算</span><span>·</span>
+      <span>大模型</span><span>·</span>
+      <span>氢能</span><span>·</span>
+      <span>核聚变</span><span>·</span>
+      <span>光伏HJT</span><span>·</span>
+      <span>口腔医疗</span><span>·</span>
+      <span>区块链</span><span>·</span>
+      <!-- 复制一份用于无缝循环 -->
+      <span>智能驾驶</span><span>·</span>
+      <span>AI芯片</span><span>·</span>
+      <span>新能源车</span><span>·</span>
+      <span>具身智能</span><span>·</span>
+      <span>脑机接口</span><span>·</span>
+      <span>医美</span><span>·</span>
+      <span>创新药</span><span>·</span>
+      <span>半导体</span><span>·</span>
+      <span>合成生物学</span><span>·</span>
+      <span>Chiplet</span><span>·</span>
+      <span>商业航天</span><span>·</span>
+      <span>量子计算</span><span>·</span>
+      <span>固态电池</span><span>·</span>
+      <span>人形机器人</span><span>·</span>
+      <span>企业级SaaS</span><span>·</span>
+      <span>云计算</span><span>·</span>
+      <span>大模型</span><span>·</span>
+      <span>氢能</span><span>·</span>
+      <span>核聚变</span><span>·</span>
+      <span>光伏HJT</span><span>·</span>
+      <span>口腔医疗</span><span>·</span>
+      <span>区块链</span><span>·</span>
+    </div>
+  </div>
+</section>
+
+<!-- Results section: same page, below hero -->
+<section class="results-section" id="resultsSection">
+  <!-- Floating decoration shapes -->
+  <div class="results-decos">
+    <div class="rd rd-1"></div>
+    <div class="rd rd-2"></div>
+    <div class="rd rd-3"></div>
+    <div class="rd rd-4"></div>
+    <div class="rd rd-5"></div>
+    <div class="rd rd-6"></div>
+    <div class="rd rd-7"></div>
+    <div class="rd rd-8"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  <div class="results-header" id="resultsHeader" style="position:relative;z-index:1">
+    <div class="rh-back-wrap">
+      <button class="rh-back-btn" onclick="goHome()" aria-label="返回首页">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>返回搜索</span>
+      </button>
+    </div>
+    <div class="rh-top">
+      <div class="rh-left">
+        <h1 id="resultsTitle"></h1>
+      </div>
+    </div>
+  </div>
+  <div class="top3-section" id="top3Section" style="display:none;position:relative;z-index:1"></div>
+  <!-- 100 关键词区标题 -->
+  <div class="kw-section-title" id="kwSectionTitle" style="display:none">
+    <div class="kst-left">
+      <div class="sect-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs><linearGradient id="iconGrad2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00AAB8"/><stop offset="100%" stop-color="#4FC2C8"/></linearGradient></defs>
+          <!-- 书本 + 关键词 grid 图标：关键词全览 -->
+          <rect x="3" y="4" width="18" height="16" rx="2.5" fill="url(#iconGrad2)" opacity=".18"/>
+          <rect x="3" y="4" width="18" height="16" rx="2.5" stroke="url(#iconGrad2)" stroke-width="1.8" fill="none"/>
+          <path d="M12 4v16" stroke="url(#iconGrad2)" stroke-width="1.6"/>
+          <rect x="5.5" y="7" width="4" height="1.6" rx="0.8" fill="url(#iconGrad2)"/>
+          <rect x="5.5" y="10" width="5" height="1.6" rx="0.8" fill="url(#iconGrad2)" opacity=".7"/>
+          <rect x="5.5" y="13" width="3.5" height="1.6" rx="0.8" fill="url(#iconGrad2)" opacity=".5"/>
+          <rect x="14" y="7" width="4.5" height="1.6" rx="0.8" fill="url(#iconGrad2)"/>
+          <rect x="14" y="10" width="3.5" height="1.6" rx="0.8" fill="url(#iconGrad2)" opacity=".7"/>
+          <rect x="14" y="13" width="5" height="1.6" rx="0.8" fill="url(#iconGrad2)" opacity=".5"/>
+        </svg>
+      </div>
+      <h2>关键词全览 <em id="kstIndName"></em></h2>
+    </div>
+    <div class="kst-meta">
+      共 <span id="kstTotal">100</span> 个专业术语
+    </div>
+  </div>
+  <!-- 分类切换 pill：关键词之上 -->
+  <div class="rh-cats" id="rhCats" style="display:none;max-width:1200px;margin:0 auto 20px;position:relative;z-index:1">
+    <span class="rh-pill active" onclick="setView('all',this)">全部</span>
+    <span class="rh-pill" onclick="setView('core',this)">核心概念</span>
+    <span class="rh-pill" onclick="setView('finance',this)">财务指标</span>
+    <span class="rh-pill" onclick="setView('tech',this)">技术术语</span>
+    <span class="rh-pill" onclick="setView('biz',this)">商业模型</span>
+  </div>
+  <div class="kw-grid" id="kwGrid" style="position:relative;z-index:1"></div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer" id="siteFooter" style="display:none">
+  <div class="footer-divider"></div>
+  <div class="footer-logo">IndustryLens</div>
+  <div class="footer-desc">基于招股书 TF-IDF 提取，用专业释义 + 大白话帮你拆解行业黑话 · 覆盖 100+ 行业</div>
+  <div class="footer-copy">© 2026 IndustryLens · Made with <span class="footer-heart">♥</span> by 小罗</div>
+</footer>
+
+<!-- Loading overlay -->
+<div class="loading" id="loadingOverlay">
+  <div class="load-inner">
+    <!-- 透镜扫描图标：环形旋转轨道 + 中心脉冲透镜 + 数据点 -->
+    <div class="load-orb">
+      <svg class="load-orb-rings" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#00AAB8" stop-opacity="1"/>
+            <stop offset="50%" stop-color="#4FC2C8" stop-opacity=".8"/>
+            <stop offset="100%" stop-color="#B8E4E3" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="ringGrad2" x1="1" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1FB8C4" stop-opacity=".9"/>
+            <stop offset="100%" stop-color="#7FD3D6" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <!-- 外环：逆时针慢转 -->
+        <circle class="r-outer" cx="60" cy="60" r="54" stroke="url(#ringGrad)" stroke-width="2.5" stroke-dasharray="180 160" stroke-linecap="round" opacity=".85"/>
+        <!-- 中环：顺时针快转 -->
+        <circle class="r-mid" cx="60" cy="60" r="42" stroke="url(#ringGrad2)" stroke-width="2.5" stroke-dasharray="120 140" stroke-linecap="round"/>
+        <!-- 数据刻度点 -->
+        <g class="r-ticks">
+          <circle cx="60" cy="10" r="3" fill="#00AAB8"/>
+          <circle cx="110" cy="60" r="3" fill="#4FC2C8"/>
+          <circle cx="60" cy="110" r="3" fill="#7FD3D6"/>
+          <circle cx="10" cy="60" r="3" fill="#B8E4E3"/>
+        </g>
+      </svg>
+      <!-- 中心透镜：脉冲 -->
+      <div class="load-orb-lens">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <radialGradient id="lensFill" cx="35%" cy="35%" r="70%">
+              <stop offset="0%" stop-color="#FFFFFF" stop-opacity=".9"/>
+              <stop offset="50%" stop-color="#4FC2C8" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#00AAB8" stop-opacity=".3"/>
+            </radialGradient>
+          </defs>
+          <!-- 把手：白底 + 青描边，做出立体镜柄 -->
+          <path d="M20.5 20.5 L27.5 27.5" stroke="#FFFFFF" stroke-width="4.2" stroke-linecap="round"/>
+          <path d="M20.5 20.5 L27.5 27.5" stroke="#00AAB8" stroke-width="2.6" stroke-linecap="round"/>
+          <!-- 镜身：双描边（白底+青边），内填浅青玻璃感 -->
+          <circle cx="13.5" cy="13.5" r="9.5" fill="url(#lensFill)" stroke="#FFFFFF" stroke-width="2.2"/>
+          <circle cx="13.5" cy="13.5" r="9.5" fill="none" stroke="#00AAB8" stroke-width="1.6"/>
+          <!-- 镜身高光 -->
+          <path d="M 8 10 Q 9 7 12 6.5" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity=".9"/>
+        </svg>
+      </div>
+      <!-- 光晕 -->
+      <div class="load-orb-halo"></div>
+    </div>
+
+    <div class="load-title" id="loadTitle">正在分析行业...</div>
+    <div class="load-sub" id="loadSub"></div>
+    <div class="load-bar"><div class="load-fill" id="loadBar"></div></div>
+
+    <!-- 三步骤指示灯 -->
+    <div class="load-steps" id="loadSteps">
+      <div class="load-step" data-step="1"><span class="ls-dot"></span><span>解析行业特征</span></div>
+      <div class="load-step" data-step="2"><span class="ls-dot"></span><span>提取 100 关键词</span></div>
+      <div class="load-step" data-step="3"><span class="ls-dot"></span><span>匹配标杆公司</span></div>
+    </div>
+  </div>
+</div>
+
+<script src="keywords.js?v=6"></script>
+<script src="kw_saas.js?v=20260422"></script>
+<script src="kw_pet.js?v=20260422"></script>
+<script src="kw_bio.js?v=20260422"></script>
+<script src="kw_semi.js?v=20260422"></script>
+<script src="kw_newenergy.js?v=20260422"></script>
+<script src="kw_consumer.js?v=20260422"></script>
+<script src="kw_ai.js?v=20260422"></script>
+<script src="kw_fintech.js?v=20260422"></script>
+<!-- ===== 新增 47 个行业关键词 ===== -->
+<script src="kw_ecommerce.js?v=20260422"></script>
+<script src="kw_logistics.js?v=20260422"></script>
+<script src="kw_education.js?v=20260422"></script>
+<script src="kw_gaming.js?v=20260422"></script>
+<script src="kw_shortVideo.js?v=20260422"></script>
+<script src="kw_socialMedia.js?v=20260422"></script>
+<script src="kw_cloud.js?v=20260422"></script>
+<script src="kw_cybersec.js?v=20260422"></script>
+<script src="kw_bigdata.js?v=20260422"></script>
+<script src="kw_iot.js?v=20260422"></script>
+<script src="kw_blockchain.js?v=20260422"></script>
+<script src="kw_robotics.js?v=20260422"></script>
+<script src="kw_drone.js?v=20260422"></script>
+<script src="kw_ar_vr.js?v=20260422"></script>
+<script src="kw_quantum.js?v=20260422"></script>
+<script src="kw_satellite.js?v=20260422"></script>
+<script src="kw_telecom.js?v=20260422"></script>
+<script src="kw_smartHome.js?v=20260422"></script>
+<script src="kw_auto_parts.js?v=20260422"></script>
+<script src="kw_nev.js?v=20260422"></script>
+<script src="kw_charging.js?v=20260422"></script>
+<script src="kw_solar.js?v=20260422"></script>
+<script src="kw_windPower.js?v=20260422"></script>
+<script src="kw_hydrogen.js?v=20260422"></script>
+<script src="kw_carbon.js?v=20260422"></script>
+<script src="kw_enviro.js?v=20260422"></script>
+<script src="kw_medDevice.js?v=20260422"></script>
+<script src="kw_cxo.js?v=20260422"></script>
+<script src="kw_ivd.js?v=20260422"></script>
+<script src="kw_digitalMed.js?v=20260422"></script>
+<script src="kw_cosme.js?v=20260422"></script>
+<script src="kw_luxury.js?v=20260422"></script>
+<script src="kw_sports.js?v=20260422"></script>
+<script src="kw_tourism.js?v=20260422"></script>
+<script src="kw_catering.js?v=20260422"></script>
+<script src="kw_property.js?v=20260422"></script>
+<script src="kw_construction.js?v=20260422"></script>
+<script src="kw_homeDecor.js?v=20260422"></script>
+<script src="kw_textile.js?v=20260422"></script>
+<script src="kw_agriculture.js?v=20260422"></script>
+<script src="kw_animalHusb.js?v=20260422"></script>
+<script src="kw_fishery.js?v=20260422"></script>
+<script src="kw_forestry.js?v=20260422"></script>
+<script src="kw_mining.js?v=20260422"></script>
+<script src="kw_steel.js?v=20260422"></script>
+<script src="kw_chem.js?v=20260422"></script>
+<script src="kw_newMaterial.js?v=20260422"></script>
+<script src="companies.js?v=20260422"></script>
+<!-- ===== 补齐最后 44 个行业 ===== -->
+<script src="kw_medAesth.js?v=20260422"></script>
+<script src="kw_dentistry.js?v=20260422"></script>
+<script src="kw_eyeCare.js?v=20260422"></script>
+<script src="kw_healthFood.js?v=20260422"></script>
+<script src="kw_elderly.js?v=20260422"></script>
+<script src="kw_fertility.js?v=20260422"></script>
+<script src="kw_tcm.js?v=20260422"></script>
+<script src="kw_hrTech.js?v=20260422"></script>
+<script src="kw_display.js?v=20260422"></script>
+<script src="kw_ai_chip.js?v=20260422"></script>
+<script src="kw_chiplet.js?v=20260422"></script>
+<script src="kw_embodied_ai.js?v=20260422"></script>
+<script src="kw_brainComp.js?v=20260422"></script>
+<script src="kw_synBio.js?v=20260422"></script>
+<script src="kw_spaceComm.js?v=20260422"></script>
+<script src="kw_legalTech.js?v=20260422"></script>
+<script src="kw_propTech.js?v=20260422"></script>
+<script src="kw_agriTech.js?v=20260422"></script>
+<script src="kw_aerospace.js?v=20260422"></script>
+<script src="kw_defense.js?v=20260422"></script>
+<script src="kw_nuclear.js?v=20260422"></script>
+<script src="kw_oceanEngg.js?v=20260422"></script>
+<script src="kw_rail.js?v=20260422"></script>
+<script src="kw_shipping.js?v=20260422"></script>
+<script src="kw_aviation.js?v=20260422"></script>
+<script src="kw_insurance.js?v=20260422"></script>
+<script src="kw_securities.js?v=20260422"></script>
+<script src="kw_banking.js?v=20260422"></script>
+<script src="kw_assetMgmt.js?v=20260422"></script>
+<script src="kw_wealth.js?v=20260422"></script>
+<script src="kw_pe_vc.js?v=20260422"></script>
+<script src="kw_reits.js?v=20260422"></script>
+<script src="kw_mediaEnt.js?v=20260422"></script>
+<script src="kw_advertising.js?v=20260422"></script>
+<script src="kw_music.js?v=20260422"></script>
+<script src="kw_publishing.js?v=20260422"></script>
+<script src="kw_anime.js?v=20260422"></script>
+<script src="kw_pcb.js?v=20260422"></script>
+<script src="kw_power_semi.js?v=20260422"></script>
+<script src="kw_storage.js?v=20260422"></script>
+<script src="kw_os_infra.js?v=20260422"></script>
+<script src="kw_infoSec.js?v=20260422"></script>
+<script src="kw_erp.js?v=20260422"></script>
+<script src="kw_lowCode.js?v=20260422"></script>
+<script src="kw_rpa.js?v=20260422"></script>
+<script src="kw_digitalTwin.js?v=20260422"></script>
+<script src="kw_smartCity.js?v=20260422"></script>
+<script src="kw_smartMfg.js?v=20260422"></script>
+<script src="kw_threeDPrint.js?v=20260422"></script>
+<script src="kw_laser.js?v=20260422"></script>
+<script src="kw_semicEquip.js?v=20260422"></script>
+<script src="kw_optics.js?v=20260422"></script>
+<script src="kw_quantum.js?v=20260422"></script>
+<script src="kw_satellite.js?v=20260422"></script>
+<script src="synonyms.js?v=20260422"></script>
+<!-- ===== AI 服务（本地 key + DeepSeek 流式 + 缓存） ===== -->
+<script src="config.local.js?v=1"></script>
+<script src="ai-service.js?v=1"></script>
+<script>
+if (typeof KEYWORDS_DB === 'undefined') { var KEYWORDS_DB = {}; }
+
+var INDUSTRY_MAP = {
+  /* ===== 已上线（有关键词数据） ===== */
+  'saas':       {name:'企业级 SaaS',  tags:['saas','crm','协同','办公软件','企业服务','订阅制','云服务']},
+  'auto':       {name:'智能驾驶',      tags:['智能驾驶','自动驾驶','无人驾驶','adas','智驾','车路协同','智能座舱']},
+  'pet':        {name:'宠物经济',      tags:['宠物','猫','狗','宠物食品','宠物服饰','宠物医疗','萌宠']},
+  'bio':        {name:'生物医药',      tags:['医药','生物','基因','抗体','临床','药物','制药']},
+  'semi':       {name:'半导体芯片',    tags:['芯片','半导体','晶圆','封测','eda','soc','光刻','集成电路']},
+  'newenergy':  {name:'新能源',        tags:['新能源','锂电','储能','太阳能']},
+  'consumer':   {name:'大消费',        tags:['消费','食品','饮料','白酒','零食','咖啡','茶饮','快消']},
+  'ai':         {name:'人工智能',      tags:['人工智能','ai','大模型','llm','深度学习','机器学习','aigc','gpt','chatgpt']},
+  'fintech':    {name:'金融科技',      tags:['金融科技','支付','第三方支付','移动支付','微信支付','支付宝','征信','fintech','消费金融','助贷','风控']},
+
+  /* ===== 即将上线（100个主流行业，搜索可匹配） ===== */
+  'ecommerce':    {name:'电子商务',    tags:['电商','电子商务','跨境电商','直播电商','社交电商','网购','拼多多','淘宝','京东','shopify']},
+  'logistics':    {name:'物流快递',    tags:['物流','快递','仓储','供应链','冷链','顺丰','中通','末端配送']},
+  'education':    {name:'在线教育',    tags:['教育','在线教育','k12','职业教育','知识付费','网课','培训','慕课']},
+  'gaming':       {name:'游戏',        tags:['游戏','手游','端游','电竞','元宇宙游戏','mmorpg','gaas','休闲游戏']},
+  'shortVideo':   {name:'短视频',      tags:['短视频','直播','抖音','快手','tiktok','视频号','vlog','内容创作']},
+  'socialMedia':  {name:'社交网络',    tags:['社交','社交网络','即时通讯','微信','微博','陌陌','soul','社区']},
+  'cloud':        {name:'云计算',      tags:['云计算','iaas','paas','公有云','私有云','混合云','aws','阿里云','腾讯云','华为云']},
+  'cybersec':     {name:'网络安全',    tags:['网络安全','信息安全','安全','防火墙','零信任','态势感知','等保','密码']},
+  'bigdata':      {name:'大数据',      tags:['大数据','数据分析','数据中台','数据治理','数据仓库','etl','bi','数据可视化']},
+  'iot':          {name:'物联网',      tags:['物联网','iot','智能硬件','传感器','边缘计算','nb-iot','lorawan']},
+  'blockchain':   {name:'区块链',      tags:['区块链','web3','web 3','web3.0','nft','defi','dao','gamefi','socialfi','数字藏品','智能合约','以太坊','ethereum','eth','比特币','btc','bitcoin','加密货币','数字货币','crypto','加密','稳定币','usdt','usdc','pow','pos','挖矿','链上','公链','l1','l2','staking']},
+  'robotics':     {name:'机器人',      tags:['机器人','工业机器人','协作机器人','服务机器人','agv','机械臂']},
+  'drone':        {name:'无人机',      tags:['无人机','drone','uav','大疆','低空经济','evtol','飞行汽车']},
+  'ar_vr':        {name:'AR/VR',       tags:['ar','vr','xr','混合现实','增强现实','虚拟现实','头显','vision pro','元宇宙']},
+  'quantum':      {name:'量子计算',    tags:['量子','量子计算','量子通信','量子纠缠','超导量子','量子密钥']},
+  'satellite':    {name:'卫星互联网',  tags:['卫星','卫星互联网','低轨卫星','遥感','北斗','spacex','星链']},
+  'telecom':      {name:'通信',        tags:['通信','5g','6g','光通信','基站','运营商','移动','联通','电信','通讯']},
+  'smartHome':    {name:'智能家居',    tags:['智能家居','智能音箱','智能门锁','全屋智能','小米','homekit','alexa']},
+  'auto_parts':   {name:'汽车零部件',  tags:['汽车零部件','汽配','线控底盘','热管理','域控制器','tier1']},
+  'nev':          {name:'新能源汽车',  tags:['新能源汽车','电动车','ev','比亚迪','特斯拉','蔚来','理想','小鹏','混动','增程']},
+  'charging':     {name:'充电桩',      tags:['充电桩','充电','换电','超充','充电网络','充电运营']},
+  'solar':        {name:'光伏',        tags:['光伏','太阳能电池','组件','逆变器','分布式光伏','perovskite','topcon','hjt']},
+  'windPower':    {name:'风电',        tags:['风电','海上风电','风机','叶片','风力发电','风塔']},
+  'hydrogen':     {name:'氢能',        tags:['氢能','燃料电池','制氢','绿氢','质子交换膜','加氢站']},
+  'carbon':       {name:'碳中和',      tags:['碳中和','碳交易','碳排放','碳足迹','双碳','碳汇','碳捕获','ccus']},
+  'enviro':       {name:'环保',        tags:['环保','污水','固废','垃圾','危废','环境监测','节能','脱碳']},
+  'pharma':       {name:'创新药',      tags:['创新药','pd-1','adc','car-t','双抗','sirna','基因治疗','细胞治疗','靶向药']},
+  'medDevice':    {name:'医疗器械',    tags:['医疗器械','内窥镜','骨科','心血管','影像','超声','ct','mri','手术机器人']},
+  'cxo':          {name:'医药外包(CXO)', tags:['cxo','cro','cdmo','cmo','药明','临床试验','外包','合同研发']},
+  'ivd':          {name:'体外诊断',    tags:['ivd','体外诊断','pcr','基因测序','化学发光','poct','分子诊断']},
+  'digitalMed':   {name:'数字医疗',    tags:['数字医疗','互联网医疗','远程医疗','在线问诊','医疗ai','电子病历','his']},
+  'cosme':        {name:'美妆护肤',    tags:['美妆','护肤','化妆品','功效护肤','面膜','防晒','彩妆','国货美妆']},
+  'luxury':       {name:'奢侈品',      tags:['奢侈品','lv','gucci','hermes','高端消费','珠宝','腕表','奢侈']},
+  'sports':       {name:'体育运动',    tags:['体育','运动','健身','瑜伽','跑步','球鞋','lululemon','安踏','李宁','运动品牌']},
+  'tourism':      {name:'旅游',        tags:['旅游','酒店','民宿','ota','携程','飞猪','出行','景区','旅行']},
+  'catering':     {name:'餐饮',        tags:['餐饮','连锁','火锅','奶茶','预制菜','中央厨房','海底捞','瑞幸','外卖']},
+  'property':     {name:'房地产',      tags:['房地产','地产','楼盘','商业地产','物业','租赁','不动产']},
+  'construction': {name:'建筑工程',    tags:['建筑','施工','工程','基建','装配式','bim','钢结构','水泥']},
+  'homeDecor':    {name:'家居建材',    tags:['家居','家装','建材','定制家居','瓷砖','涂料','家具','软装']},
+  'textile':      {name:'纺织服装',    tags:['纺织','服装','服饰','面料','快时尚','shein','代工']},
+  'agriculture':  {name:'农业科技',    tags:['农业','智慧农业','种业','化肥','农药','饲料','农机','农业科技','精准农业','植保无人机','农业大数据','智能温室']},
+  'animalHusb':   {name:'畜牧养殖',    tags:['猪','牛','禽','畜牧','养猪','牧原','养鸡','肉类']},
+  'fishery':      {name:'渔业水产',    tags:['渔业','水产','养殖','海鲜','三文鱼','虾','海洋牧场']},
+  'forestry':     {name:'林业碳汇',    tags:['林业','木材','造纸','竹制品','森林']},
+  'mining':       {name:'矿业',        tags:['矿业','采矿','稀土','锂矿','铁矿','铜矿','矿产','矿石']},
+  'steel':        {name:'钢铁',        tags:['钢铁','钢材','特钢','不锈钢','宝钢','炼钢','钢']},
+  'chem':         {name:'化工',        tags:['化工','石化','精细化工','化学品','新材料化工','塑料','橡胶']},
+  'newMaterial':  {name:'新材料',      tags:['新材料','碳纤维','石墨烯','气凝胶','陶瓷','纳米','复合材料','高分子']},
+  'display':      {name:'显示面板',    tags:['面板','lcd','oled','mini led','micro led','京东方','显示','屏幕']},
+  'pcb':          {name:'PCB/电子元器件', tags:['pcb','电容','电阻','连接器','被动元件','mlcc','印刷电路','元器件']},
+  'power_semi':   {name:'功率半导体',  tags:['功率半导体','igbt','mosfet','sic','gan','碳化硅','氮化镓','第三代半导体']},
+  'storage':      {name:'存储芯片',    tags:['存储','nand','dram','hbm','内存','闪存','ssd','长鑫','长江存储']},
+  'ai_chip':      {name:'AI芯片',      tags:['ai芯片','gpu','npu','tpu','寒武纪','昇腾','算力芯片','推理芯片']},
+  'os_infra':     {name:'操作系统/基础软件', tags:['操作系统','os','数据库','中间件','编译器','openharmony']},
+  'infoSec':      {name:'信创',        tags:['信创','国产化','国产替代','自主可控','鲲鹏','飞腾','麒麟','统信']},
+  'erp':          {name:'ERP/企业管理', tags:['erp','企业管理','用友','金蝶','sap','oracle','财务软件','hr系统']},
+  'lowCode':      {name:'低代码',      tags:['低代码','无代码','low code','no code','拖拉拽','快速开发','公民开发者']},
+  'rpa':          {name:'RPA',          tags:['rpa','流程自动化','机器人流程','来也','uipath','流程挖掘']},
+  'digitalTwin':  {name:'数字孪生',    tags:['数字孪生','仿真','数字化','工业仿真','建模','digital twin']},
+  'smartCity':    {name:'智慧城市',    tags:['智慧城市','城市大脑','智慧交通','智慧政务','城市治理']},
+  'smartMfg':     {name:'智能制造',    tags:['智能制造','工业4.0','工业互联网','mes','scada','产线','数字化工厂','中国制造','中国制造2025','先进制造','高端制造','工业升级']},
+  'threeDPrint':  {name:'3D打印',      tags:['3d打印','增材制造','金属打印','光固化','slm','fdm']},
+  'laser':        {name:'激光',        tags:['激光','光纤激光','超快激光','激光切割','激光雷达','lidar']},
+  'semicEquip':   {name:'半导体设备',  tags:['半导体设备','刻蚀机','光刻机','cvd','pvd','离子注入','amat','asml']},
+  'optics':       {name:'光学光电',    tags:['光学','光电','镜头','光模块','光纤','光器件','舜宇']},
+  'aerospace':    {name:'航空航天',    tags:['航空','航天','飞机','火箭','发动机','空天']},
+  'defense':      {name:'军工',        tags:['军工','国防','导弹','雷达','舰船','航空发动机','军民融合']},
+  'nuclear':      {name:'核能',        tags:['核能','核电','核聚变','核反应堆','铀','核燃料']},
+  'oceanEngg':    {name:'海洋工程',    tags:['海洋','深海','海底','海工装备','水下机器人','海洋探测']},
+  'rail':         {name:'轨道交通',    tags:['轨道交通','高铁','地铁','城轨','动车','列车','信号系统']},
+  'shipping':     {name:'航运',        tags:['航运','集装箱','港口','远洋','散货','油轮','船舶','造船']},
+  'aviation':     {name:'民航',        tags:['民航','航空公司','机场','飞机制造','c919','波音','空客']},
+  'insurance':    {name:'保险',        tags:['保险','寿险','财险','健康险','保费','精算','再保险','insurtech']},
+  'securities':   {name:'证券',        tags:['证券','券商','投行','经纪','ipo','融资融券']},
+  'banking':      {name:'银行',        tags:['银行','信贷','存款','贷款','零售银行','对公','普惠金融','数字银行']},
+  'assetMgmt':    {name:'资产管理',    tags:['资管','公募','私募','对冲基金','量化','etf','fof','基金']},
+  'wealth':       {name:'财富管理',    tags:['财富管理','私人银行','家族办公室','理财','高净值','信托']},
+  'pe_vc':        {name:'创投PE/VC',   tags:['创投','vc','pe','风险投资','天使','母基金','gp','lp','一级市场']},
+  'reits':        {name:'REITs',        tags:['reits','不动产投资信托','基础设施reits','公募reits']},
+  'mediaEnt':     {name:'影视传媒',    tags:['影视','传媒','电影','电视剧','综艺','流媒体','netflix','爱奇艺','内容']},
+  'advertising':  {name:'广告营销',    tags:['广告','营销','数字营销','adtech','martech','dsp','程序化','品牌']},
+  'music':        {name:'音乐',        tags:['音乐','流媒体音乐','版权','唱片','演唱会','音乐节','spotify','tmeland']},
+  'publishing':   {name:'出版',        tags:['出版','图书','数字阅读','有声书','kindle','网络文学','ip']},
+  'anime':        {name:'动漫',        tags:['动漫','二次元','漫画','国漫','b站','番剧','动画','手办']},
+  'elderly':      {name:'养老',        tags:['养老','老年','银发','适老化','养老金','养老院','康养']},
+  'fertility':    {name:'母婴',        tags:['母婴','婴儿','奶粉','纸尿裤','孕产','儿童','辅食']},
+  'healthFood':   {name:'保健食品',    tags:['保健','保健食品','营养','功能食品','益生菌','膳食补充剂','维生素']},
+  'tcm':          {name:'中医药',      tags:['中医','中药','中成药','中医药','草药','配方颗粒','饮片']},
+  'dentistry':    {name:'口腔医疗',    tags:['口腔','牙科','种植牙','正畸','隐形牙套','齿科']},
+  'eyeCare':      {name:'眼科',        tags:['眼科','近视','ok镜','icl','视光','眼镜','隐形眼镜','角膜']},
+  'medAesth':     {name:'医美',        tags:['医美','玻尿酸','肉毒素','抗衰','医疗美容','水光针']},
+  'hrTech':       {name:'人力资源',    tags:['人力资源','hr','招聘','猎头','灵活用工','人才管理','薪酬']},
+  'legalTech':    {name:'法律科技',    tags:['法律','legaltech','合规','合同管理','电子签章','律所']},
+  'propTech':     {name:'房产科技',    tags:['proptech','房产科技','租房','贝壳','链家','房产交易','智慧物业']},
+  'spaceComm':    {name:'商业航天',    tags:['商业航天','运载火箭','卫星制造','深蓝航天','蓝箭','银河航天']},
+  'synBio':       {name:'合成生物学',  tags:['合成生物','合成生物学','基因编辑','crispr','工程菌','生物铸造']},
+  'brainComp':    {name:'脑机接口',    tags:['脑机接口','bci','脑电','neuralink','神经接口','脑科学']},
+  'chiplet':      {name:'Chiplet先进封装', tags:['chiplet','先进封装','3d封装','cowos','tsv','interposer','异构集成']},
+  'embodied_ai':  {name:'具身智能',    tags:['具身智能','embodied ai','人形机器人','figure','tesla bot','通用机器人']},
+};
+
+
+function matchIndustry_legacy(kw) {
+  // legacy, replaced by synonyms.js matchIndustry
+  return null;
+}
+
+/* 前端本地快速黑名单：明显不是行业词的输入直接拦截，省一次 AI 调用 */
+var INPUT_BLACKLIST = {
+  // 国家
+  '意大利':1,'法国':1,'日本':1,'德国':1,'美国':1,'英国':1,'中国':1,'韩国':1,'印度':1,'俄罗斯':1,'加拿大':1,'澳大利亚':1,'新加坡':1,'西班牙':1,'荷兰':1,'瑞士':1,'瑞典':1,'挪威':1,'巴西':1,'越南':1,'泰国':1,
+  // 城市
+  '北京':1,'上海':1,'广州':1,'深圳':1,'杭州':1,'成都':1,'苏州':1,'武汉':1,'南京':1,'西安':1,'天津':1,'重庆':1,
+  // 抽象词
+  '幸福':1,'未来':1,'梦想':1,'爱情':1,'自由':1,'人生':1,'成功':1,'财富':1
+};
+var BLACKLIST_REASONS = {
+  '意大利':{r:'「意大利」是国家名，不是行业或技术词。',s:['奢侈品','葡萄酒','意大利面']},
+  '法国':{r:'「法国」是国家名，不是行业或技术词。',s:['奢侈品','葡萄酒','香水']},
+  '日本':{r:'「日本」是国家名，不是行业或技术词。',s:['半导体','动漫','机器人']},
+  '美国':{r:'「美国」是国家名，不是行业或技术词。',s:['AI','半导体','好莱坞']},
+  '北京':{r:'「北京」是城市名，不是行业或技术词。',s:['互联网','芯片','文旅']},
+  '上海':{r:'「上海」是城市名，不是行业或技术词。',s:['金融','汽车','生物医药']},
+  '深圳':{r:'「深圳」是城市名，不是行业或技术词。',s:['电子制造','AI','新能源']}
+};
+function preCheckInput(kw) {
+  if (!kw) return null;
+  // 单字符或纯数字
+  if (kw.length <= 1) return {r:'输入太短，至少需要 2 个字符。', s:['智能驾驶','AI芯片','新能源车']};
+  if (/^\d+$/.test(kw)) return {r:'纯数字不是行业词。', s:['智能驾驶','AI芯片','新能源车']};
+  // 黑名单
+  if (INPUT_BLACKLIST[kw]) {
+    var info = BLACKLIST_REASONS[kw];
+    return info ? info : {r:'「'+kw+'」不是行业/公司/技术词。', s:['智能驾驶','AI芯片','医美']};
+  }
+  return null;
+}
+
+function doSearch(skipHash) {
+  var kw = document.getElementById('searchInput').value.trim();
+  if (!kw) { document.getElementById('searchInput').focus(); return; }
+
+  // 前置合法性检查
+  var invalidInfo = preCheckInput(kw);
+  if (invalidInfo) {
+    showInvalidInputHint(kw, invalidInfo.r, invalidInfo.s);
+    return;
+  }
+
+  var indId = matchIndustry(kw);
+  if (!indId) { indId = '_custom'; INDUSTRY_MAP['_custom'] = {name: kw, tags: [kw]}; }
+
+  // 写入 URL hash
+  if (!skipHash) {
+    try {
+      var newHash = '#' + encodeURIComponent(kw);
+      if (location.hash !== newHash) {
+        history.pushState({kw: kw}, '', newHash);
+      }
+    } catch(e) {}
+  }
+
+  // 判断本地数据是否存在
+  var hasLocal = KEYWORDS_DB[indId] && KEYWORDS_DB[indId].length > 0;
+  if (hasLocal) {
+    // 本地命中：走原假进度条，秒开体验
+    showLoading(kw, INDUSTRY_MAP[indId].name, indId);
+    // C方案：评估数据质量，弱则后台静默增强
+    // maybeEnhanceInBackground(kw, indId);  // 已关闭：后台增强会导致内容跳变，用户困惑
+  } else {
+    // 本地未命中：走 AI（先查缓存→流式生成）
+    runAIGeneration(kw, indId);
+  }
+}
+
+/* ========== C方案：后台静默增强 ========== */
+// 标记某个 indId 是否已经增强过（当前会话）
+var _enhancedIndIds = {};
+// 判断数据是否"弱"：数量<25 或 pro平均长度<50
+function isDataWeak(keywords) {
+  if (!keywords || keywords.length < 25) return true;
+  var total = 0, count = 0;
+  for (var i = 0; i < keywords.length; i++) {
+    if (keywords[i].pro) { total += keywords[i].pro.length; count++; }
+  }
+  var avg = count ? total / count : 0;
+  return avg < 50; // 专业释义平均不到50字视为弱
+}
+
+function maybeEnhanceInBackground(kw, indId) {
+  // 已增强过则跳过
+  if (_enhancedIndIds[indId]) return;
+  // 数据够强则跳过
+  if (!isDataWeak(KEYWORDS_DB[indId])) return;
+  // 没 AI Key 则跳过（不打扰用户）
+  if (!window.AIService || !AIService.hasKey()) return;
+
+  _enhancedIndIds[indId] = true; // 标记，避免重复请求
+  var indName = INDUSTRY_MAP[indId] ? INDUSTRY_MAP[indId].name : kw;
+
+  // 显示一个低调的"增强中"小徽章
+  showEnhanceBadge('正在调用 AI 深度增强…');
+
+  AIService.generate(kw, {
+    onCache: function(data){
+      // 缓存命中也走 onDone（缓存版会直接到 onDone）
+    },
+    onDone: function(data){
+      try {
+        // 覆盖关键词数据
+        if (data && Array.isArray(data.keywords) && data.keywords.length > 0) {
+          KEYWORDS_DB[indId] = data.keywords.map(function(k, i){
+            return {
+              rank: k.rank || (i+1),
+              cat: k.cat || 'core',
+              term: k.term || '',
+              pro: k.pro || '',
+              ez: k.ez || ''
+            };
+          });
+        }
+        // 覆盖公司数据
+        if (data && Array.isArray(data.companies) && data.companies.length > 0) {
+          window.COMPANIES_DB = window.COMPANIES_DB || {};
+          window.COMPANIES_DB[indId] = data.companies.map(function(c){
+            return {
+              name: c.name || '', enName: c.enName || '', domain: c.domain || '',
+              ecoNiche: c.ecoNiche || '生态参与者',
+              tags: Array.isArray(c.tags) ? c.tags : [],
+              moatPro: c.moatPro || '', moatEz: c.moatEz || '',
+              lifecycle: typeof c.lifecycle === 'number' ? c.lifecycle : 2,
+              lifeLabel: c.lifeLabel || ['初创期','成长期','成熟期','转型期'][c.lifecycle || 2],
+              revenue: Array.isArray(c.revenue) ? c.revenue : []
+            };
+          });
+        }
+        // 无缝替换当前页（如果正在显示该行业）
+        var rs = document.getElementById('resultsSection');
+        if (rs && rs.classList.contains('show') && window._currentIndId === indId) {
+          // 触发渲染更新（带 fade 过渡）
+          var grid = document.getElementById('kwGrid');
+          if (grid) grid.style.transition = 'opacity .35s';
+          if (grid) grid.style.opacity = '0';
+          setTimeout(function(){
+            showResults(indId, kw);
+            hideEnhanceBadge();
+            showEnhanceBadge('✨ 已升级为 AI 深度版', 2600);
+          }, 350);
+        } else {
+          hideEnhanceBadge();
+        }
+      } catch(e) {
+        console.error('增强失败', e);
+        hideEnhanceBadge();
+      }
+    },
+    onError: function(err){
+      console.warn('[AI增强失败，使用本地数据]', err);
+      hideEnhanceBadge();
+    }
+  });
+}
+
+// 低调的浮动徽章（右下角）
+function showEnhanceBadge(text, autoHideMs) {
+  var el = document.getElementById('enhanceBadge');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'enhanceBadge';
+    el.style.cssText = 'position:fixed;right:24px;bottom:24px;z-index:9999;'
+      + 'background:rgba(26,26,34,0.92);color:#fff;padding:10px 16px;'
+      + 'border-radius:100px;font-size:.82rem;font-weight:500;letter-spacing:-.005em;'
+      + 'box-shadow:0 8px 32px rgba(0,0,0,0.18);backdrop-filter:blur(12px);'
+      + 'display:flex;align-items:center;gap:8px;'
+      + 'opacity:0;transform:translateY(10px);transition:all .4s cubic-bezier(0.16,1,0.3,1);'
+      + 'max-width:90vw;';
+    document.body.appendChild(el);
+  }
+  el.innerHTML = '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,0.25);animation:pulse-dot 0.93s ease-in-out infinite"></span><span>'+text+'</span>';
+  setTimeout(function(){ el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, 10);
+  if (autoHideMs) setTimeout(hideEnhanceBadge, autoHideMs);
+}
+function hideEnhanceBadge() {
+  var el = document.getElementById('enhanceBadge');
+  if (!el) return;
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(10px)';
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 400);
+}
+
+/* ========== AI 流式生成 ========== */
+function runAIGeneration(kw, indId) {
+  if (!window.AIService) {
+    alert('AI 服务未加载'); return;
+  }
+  if (!AIService.hasKey()) {
+    var k = prompt('请输入 DeepSeek API Key（一次性，会保存在浏览器本地）:');
+    if (!k) return;
+    AIService.setKey(k);
+  }
+
+  var indName = INDUSTRY_MAP[indId] ? INDUSTRY_MAP[indId].name : kw;
+
+  // 启动 AI 专用 loading（带实时进度）
+  showAILoading(kw, indName);
+
+  AIService.generate(kw, {
+    onCache: function (data) {
+      // 命中缓存，跳过流式直接渲染
+      setLoadingTitle('⚡ 命中缓存，正在加载…');
+      setLoadingPct(100);
+    },
+    onProgress: function (stats) {
+      // 实时进度（基于已生成关键词数）
+      setLoadingPct(stats.pct);
+      if (stats.stage === 'keywords') {
+        setLoadingTitle('✨ 正在生成关键词 ' + stats.kwCount + '/' + (window.AIService && AIService.CFG ? AIService.CFG.TARGET_KW_COUNT : 30));
+      } else if (stats.stage === 'companies') {
+        setLoadingTitle('🏢 正在分析标杆公司 ' + stats.companyCount + '/3');
+      } else {
+        setLoadingTitle('🔖 收尾中…');
+      }
+    },
+    onDone: function (data) {
+      // 0) 前置合法性拦截：AI 判定输入不是行业词
+      if (data && data.invalid) {
+        hideLoading();
+        showInvalidInputHint(kw, data.reason || '这不是一个有效的行业/公司/技术词', data.suggest || []);
+        return;
+      }
+      // 1) 写入 INDUSTRY_MAP 与 KEYWORDS_DB，使后续筛选/分享正常
+      var realIndId = indId;
+      if (data.industry && data.industry.name) {
+        INDUSTRY_MAP[realIndId] = INDUSTRY_MAP[realIndId] || {name: data.industry.name, tags: [kw]};
+        INDUSTRY_MAP[realIndId].name = data.industry.name;
+      }
+      KEYWORDS_DB[realIndId] = (data.keywords || []).map(function (k, i) {
+        return {
+          rank: k.rank || (i + 1),
+          cat: k.cat || 'core',
+          term: k.term || '',
+          pro: k.pro || '',
+          ez: k.ez || ''
+        };
+      });
+      // 2) 写入 COMPANIES_DB（公司卡片库）
+      if (global_COMPANIES_DB_ready()) {
+        window.COMPANIES_DB = window.COMPANIES_DB || {};
+        if (Array.isArray(data.companies) && data.companies.length) {
+          window.COMPANIES_DB[realIndId] = data.companies.map(function (c) {
+            // 补齐字段，避免前端渲染时 undefined
+            return {
+              name: c.name || '',
+              enName: c.enName || '',
+              domain: c.domain || '',
+              ecoNiche: c.ecoNiche || '生态参与者',
+              tags: Array.isArray(c.tags) ? c.tags : [],
+              moatPro: c.moatPro || '',
+              moatEz: c.moatEz || '',
+              lifecycle: (typeof c.lifecycle === 'number') ? c.lifecycle : 2,
+              lifeLabel: c.lifeLabel || ['初创期','成长期','成熟期','转型期'][c.lifecycle || 2],
+              revenue: Array.isArray(c.revenue) ? c.revenue : []
+            };
+          });
+        }
+      }
+      // 3) 关闭 loading + 展示结果
+      setLoadingPct(100);
+      setLoadingTitle('✅ 已生成 ' + (data.keywords || []).length + ' 个关键词');
+      setTimeout(function () {
+        hideLoading();
+        showResults(realIndId, kw);
+      }, 360);
+    },
+    onError: function (err) {
+      hideLoading();
+      alert('⚠️ 生成失败：\n' + (err && err.message ? err.message : err) +
+            '\n\n你可以：\n1) 检查网络是否能访问 api.deepseek.com\n2) 确认 API Key 有余额（设置面板可更换 key）\n3) 重新搜索');
+      console.error(err);
+    }
+  });
+}
+
+function global_COMPANIES_DB_ready() { return true; }
+
+/* ========== AI Loading 控制（复用原 loadingOverlay） ========== */
+function showAILoading(kw, indName) {
+  var ov = document.getElementById('loadingOverlay'),
+      bar = document.getElementById('loadBar'),
+      title = document.getElementById('loadTitle'),
+      sub = document.getElementById('loadSub');
+  var top3 = document.getElementById('top3Section');
+  if (top3) { top3.classList.remove('show'); top3.style.display = 'none'; }
+  ov.classList.add('active');
+  bar.style.width = '4%';
+  title.textContent = '🚀 正在连接 DeepSeek…';
+  sub.textContent = '「' + kw + '」→ ' + (indName || kw) + ' · 实时生成中';
+  setLoadStep(1); // 初始：步骤 1 激活
+}
+function setLoadingPct(pct) {
+  var bar = document.getElementById('loadBar');
+  if (bar) bar.style.width = Math.max(4, Math.min(100, pct)) + '%';
+  // 根据进度自动推进 step 指示灯
+  if (pct < 30) setLoadStep(1);
+  else if (pct < 75) setLoadStep(2);
+  else setLoadStep(3);
+}
+function setLoadingTitle(t) {
+  var title = document.getElementById('loadTitle');
+  if (title) title.textContent = t;
+  // 根据标题文本关键字推断当前 step
+  if (/连接|解析|分析行业|特征/.test(t)) setLoadStep(1);
+  else if (/关键词|提取|词条|术语/.test(t)) setLoadStep(2);
+  else if (/公司|标杆|匹配/.test(t)) setLoadStep(3);
+}
+function setLoadStep(n) {
+  var steps = document.querySelectorAll('#loadSteps .load-step');
+  for (var i = 0; i < steps.length; i++) {
+    var k = i + 1;
+    steps[i].classList.remove('active', 'done');
+    if (k < n) steps[i].classList.add('done');
+    else if (k === n) steps[i].classList.add('active');
+  }
+}
+function hideLoading() {
+  var ov = document.getElementById('loadingOverlay');
+  if (ov) ov.classList.remove('active');
+}
+
+/* 输入不合法时的友好提示弹窗 */
+function showInvalidInputHint(kw, reason, suggest) {
+  // 清理旧弹窗
+  var old = document.getElementById('invalidHint');
+  if (old && old.parentNode) old.parentNode.removeChild(old);
+
+  var mask = document.createElement('div');
+  mask.id = 'invalidHint';
+  mask.style.cssText = 'position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(15,42,45,0.35);backdrop-filter:blur(12px);animation:fadeIn .2s ease';
+
+  var suggHTML = (suggest && suggest.length) ? (
+    '<div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(0,170,184,0.15)">' +
+    '<div style="font-size:.8rem;color:#6a8a8d;margin-bottom:10px;font-weight:600">🔍 也许你想找：</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">' +
+      suggest.map(function(s){
+        return '<button class="ih-chip" data-kw="'+ s.replace(/"/g,'&quot;') +'" style="padding:8px 16px;background:linear-gradient(135deg,#00AAB8,#4FC2C8);color:#fff;border:none;border-radius:20px;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .25s;box-shadow:0 4px 12px rgba(0,170,184,0.25)">' + s + '</button>';
+      }).join('') +
+    '</div></div>'
+  ) : '';
+
+  mask.innerHTML =
+    '<div style="max-width:440px;width:92%;padding:36px 32px 28px;background:rgba(255,255,255,0.95);backdrop-filter:blur(24px);border-radius:24px;box-shadow:0 30px 80px rgba(0,170,184,0.18),0 0 0 1px rgba(255,255,255,0.8) inset;text-align:center;animation:popIn .2.67s cubic-bezier(0.34,1.56,0.64,1)">' +
+      '<div style="width:56px;height:56px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(135deg,#E6F4F1,#B8E4E3);display:flex;align-items:center;justify-content:center;font-size:1.8rem">🤔</div>' +
+      '<div style="font-family:var(--font-display),\'Noto Sans SC\',sans-serif;font-size:1.2rem;font-weight:700;color:#0f2a2d;margin-bottom:10px">输入词需要调整</div>' +
+      '<div style="font-size:.92rem;color:#47636a;line-height:1.65;margin-bottom:4px"><strong style="color:#00AAB8">「'+ kw +'」</strong></div>' +
+      '<div style="font-size:.88rem;color:#6a8a8d;line-height:1.7">' + reason + '</div>' +
+      suggHTML +
+      '<button id="ihClose" style="margin-top:24px;padding:10px 28px;background:transparent;color:#47636a;border:1px solid rgba(0,170,184,0.25);border-radius:14px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .25s">知道了</button>' +
+    '</div>';
+
+  document.body.appendChild(mask);
+
+  // 点击建议词直接搜索
+  mask.querySelectorAll('.ih-chip').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var newKw = btn.getAttribute('data-kw');
+      mask.parentNode && mask.parentNode.removeChild(mask);
+      var input = document.getElementById('heroSearch');
+      if (input) input.value = newKw;
+      if (typeof doSearch === 'function') doSearch(newKw);
+    });
+  });
+  // 点击"知道了"或背景关闭
+  var closeFn = function(){ mask.style.animation='fadeOut .25s ease forwards'; setTimeout(function(){ mask.parentNode && mask.parentNode.removeChild(mask); }, 240); };
+  mask.querySelector('#ihClose').addEventListener('click', closeFn);
+  mask.addEventListener('click', function(e){ if (e.target === mask) closeFn(); });
+}
+
+/* ========== AI 设置面板（更换 key / 清缓存） ========== */
+function openAISettings() {
+  if (!window.AIService) { alert('AI 服务未加载'); return; }
+  var curKey = AIService.getKey();
+  var masked = curKey ? (curKey.slice(0, 7) + '…' + curKey.slice(-4)) : '（未设置）';
+  var choice = prompt(
+    'IndustryLens · AI 设置\n\n' +
+    '当前 Key: ' + masked + '\n\n' +
+    '输入以下数字选择操作：\n' +
+    '1 = 更换 DeepSeek API Key\n' +
+    '2 = 清空所有 AI 生成缓存（下次搜索重新生成）\n' +
+    '3 = 删除 API Key（下次搜索会要求重新输入）\n\n' +
+    '留空取消',
+    ''
+  );
+  if (!choice) return;
+  if (choice === '1') {
+    var nk = prompt('请输入新的 DeepSeek API Key：');
+    if (nk) { AIService.setKey(nk); alert('✅ 已保存新 Key'); }
+  } else if (choice === '2') {
+    var n = AIService.cacheClear();
+    alert('✅ 已清空 ' + n + ' 条缓存');
+  } else if (choice === '3') {
+    AIService.clearKey();
+    alert('✅ 已删除 Key，下次搜索会要求重新输入');
+  }
+}
+
+/* ========== URL Hash 路由：刷新/分享/前进后退 都能恢复当前行业 ========== */
+function restoreFromHash() {
+  var h = location.hash;
+  if (!h || h === '#') return false;
+  var kw = '';
+  try { kw = decodeURIComponent(h.slice(1)); } catch(e) { kw = h.slice(1); }
+  if (!kw) return false;
+  var input = document.getElementById('searchInput');
+  if (input) input.value = kw;
+  var indId = matchIndustry(kw);
+  if (!indId) { indId = '_custom'; INDUSTRY_MAP['_custom'] = {name: kw, tags: [kw]}; }
+
+  var hasLocal = KEYWORDS_DB[indId] && KEYWORDS_DB[indId].length > 0;
+  if (hasLocal) {
+    showResults(indId, kw);
+    setTimeout(function(){
+      scrollToResults(false);
+    }, 50);
+    return true;
+  }
+
+  // 本地无数据 → 先查 AI 缓存，命中秒恢复，否则触发流式生成
+  if (window.AIService) {
+    var cached = AIService.cacheGet(kw);
+    if (cached) {
+      // 快速注入缓存数据
+      KEYWORDS_DB[indId] = (cached.keywords || []).map(function (k, i) {
+        return {
+          rank: k.rank || (i + 1), cat: k.cat || 'core',
+          term: k.term || '', pro: k.pro || '', ez: k.ez || ''
+        };
+      });
+      window.COMPANIES_DB = window.COMPANIES_DB || {};
+      if (Array.isArray(cached.companies) && cached.companies.length) {
+        window.COMPANIES_DB[indId] = cached.companies;
+      }
+      if (cached.industry && cached.industry.name) {
+        INDUSTRY_MAP[indId].name = cached.industry.name;
+      }
+      showResults(indId, kw);
+      setTimeout(function(){
+        scrollToResults(false);
+      }, 50);
+      return true;
+    }
+    // 缓存也没有 → 触发生成
+    runAIGeneration(kw, indId);
+    return true;
+  }
+
+  // 兜底：显示即将上线
+  showResults(indId, kw);
+  return true;
+}
+window.addEventListener('popstate', function(){ restoreFromHash(); });
+window.addEventListener('hashchange', function(){ restoreFromHash(); });
+
+function goHome() {
+  // 清空 hash + 隐藏结果区 + 恢复首屏 + 回到顶部
+  try { history.pushState({}, '', location.pathname + location.search); } catch(e) { location.hash = ''; }
+  var rs = document.getElementById('resultsSection');
+  var ft = document.getElementById('siteFooter');
+  var hero = document.querySelector('.hero');
+  var marquee = document.querySelector('.hero-marquee');
+  if (rs) rs.classList.remove('show');
+  if (ft) ft.style.display = 'none';
+  // 恢复首屏（hero + 跑马灯）
+  if (hero) hero.style.display = '';
+  if (marquee) marquee.style.display = '';
+  var input = document.getElementById('searchInput');
+  if (input) { input.value = ''; input.focus(); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/**
+ * 滚动到结果区，减去 nav 高度 + 额外缓冲，避免标题被顶部 nav 挡住
+ * @param {boolean} smooth - 是否平滑滚动
+ */
+function scrollToResults(smooth) {
+  var rh = document.getElementById('resultsHeader');
+  if (!rh) return;
+  var navH = 60;
+  var buffer = 24; // 额外留白
+  var targetY = rh.getBoundingClientRect().top + window.pageYOffset - navH - buffer;
+  window.scrollTo({
+    top: Math.max(0, targetY),
+    behavior: smooth ? 'smooth' : 'auto'
+  });
+}
+
+function showLoading(kw, indName, indId) {
+  var ov=document.getElementById('loadingOverlay'),bar=document.getElementById('loadBar'),
+      title=document.getElementById('loadTitle'),sub=document.getElementById('loadSub');
+  var top3 = document.getElementById('top3Section');
+  if (top3) { top3.classList.remove('show'); top3.style.display='none'; }
+  ov.classList.add('active'); bar.style.width='0%';
+  sub.textContent='「'+kw+'」→ '+indName;
+  var msgs=['正在匹配行业...','分析中...','生成关键词百科...'];
+  var msgIdx=0,start=Date.now(),total=2000,done=false;
+  title.textContent=msgs[0];
+  var ticker=setInterval(function(){if(done)return;var e=Date.now()-start;
+    var pct=Math.min(e/total*100,100);bar.style.width=pct+'%';
+    var newIdx=Math.min(Math.floor(e/(total/msgs.length)),msgs.length-1);
+    if(newIdx!==msgIdx){msgIdx=newIdx;title.textContent=msgs[msgIdx];}
+    if(e>=total){done=true;clearInterval(ticker);bar.style.width='100%';title.textContent='✅ 已提取 100 个关键词';
+    setTimeout(function(){ov.classList.remove('active');showResults(indId,kw);},400);}
+  },50);
+}
+
+var currentData=null,currentView='all';
+
+function showResults(indId, kw) {
+  window._currentIndId = indId;
+  currentData = KEYWORDS_DB[indId];
+  currentSearchKw = kw;
+  currentIndName = INDUSTRY_MAP[indId] ? INDUSTRY_MAP[indId].name : kw;
+  var rs = document.getElementById('resultsSection');
+  var ft = document.getElementById('siteFooter');
+  var hero = document.querySelector('.hero');
+  var marquee = document.querySelector('.hero-marquee');
+  var indName = currentIndName;
+
+  rs.classList.add('show');
+  ft.style.display = 'block';
+  // 隐藏首屏（hero + 跑马灯），避免与结果页重叠造成视觉混乱
+  if (hero) hero.style.display = 'none';
+  if (marquee) marquee.style.display = 'none';
+  // 保证从顶部开始看结果
+  window.scrollTo({top:0, behavior:'auto'});
+
+  if (!currentData || currentData.length === 0) {
+    document.getElementById('resultsTitle').innerHTML = '<span>' + indName + '</span> <em>·</em> 关键词百科';
+    renderTop3(indId, indName);
+    document.getElementById('kwGrid').innerHTML =
+      '<div class="coming-soon">' +
+        '<div class="coming-icon">🚀</div>' +
+        '<div class="coming-title">「' + indName + '」行业百科即将上线</div>' +
+        '<div class="coming-desc">我们正在解析该行业 Top 10 上市公司的招股书，<br>提取 100 个关键术语并生成专业释义与大白话翻译。<br><br>已上线 9 大行业，覆盖 100+ 行业搜索：</div>' +
+        '<div class="coming-tags">' +
+          '<span class="coming-tag" onclick="quickSearch(\'智能驾驶\')">🚗 智能驾驶</span>' +
+          '<span class="coming-tag" onclick="quickSearch(\'SaaS\')">☁️ 企业级 SaaS</span>' +
+          '<span class="coming-tag" onclick="quickSearch(\'宠物\')">🐾 宠物经济</span>' +
+          '<span class="coming-tag" onclick="quickSearch(\'生物医药\')">💊 生物医药</span>' +
+          '<span class="coming-tag" onclick="quickSearch(\'芯片\')">🔬 半导体芯片</span>' +
+          '<span class="coming-tag" onclick="quickSearch(\'新能源\')">⚡ 新能源</span>' +
+          '<span class="coming-tag" onclick="quickSearch(\'消费\')">🛒 大消费</span>' +
+          '<span class="coming-tag" onclick="quickSearch(\'人工智能\')">🤖 人工智能</span>' +
+          '<span class="coming-tag" onclick="quickSearch(\'金融科技\')">💳 金融科技</span>' +
+        '</div>' +
+        '<div class="coming-note">新行业每周持续更新</div>' +
+      '</div>';
+    setTimeout(function() {
+      scrollToResults(true);
+    }, 100);
+    return;
+  }
+
+  currentView = 'all';
+  document.getElementById('resultsTitle').innerHTML = '<span>' + indName + '</span> <em>·</em> 100 关键词百科';
+  var pills = document.querySelectorAll('.rh-pill');
+  for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
+  pills[0].classList.add('active');
+  renderTop3(indId, indName);
+  // 填充并显示 100 关键词区标题
+  var kstWrap = document.getElementById('kwSectionTitle');
+  var kstTotal = document.getElementById('kstTotal');
+  var kstIndName = document.getElementById('kstIndName');
+  if (kstWrap && kstTotal && currentData) {
+    var total = currentData.length;
+    kstTotal.textContent = total;
+    kstIndName.textContent = '· ' + indName;
+    kstWrap.style.display = 'flex';
+  } else if (kstWrap) {
+    kstWrap.style.display = 'none';
+  }
+  // 分类 pill 与关键词区一同显示
+  var rhCats = document.getElementById('rhCats');
+  if (rhCats) rhCats.style.display = (currentData && currentData.length) ? 'flex' : 'none';
+  renderGrid(currentData);
+
+  setTimeout(function() {
+    scrollToResults(true);
+  }, 100);
+}
+
+function quickSearch(kw) {
+  document.getElementById('searchInput').value = kw;
+  doSearch();
+}
+
+function setView(v, el) {
+  currentView = v;
+  var pills = document.querySelectorAll('.rh-pill');
+  for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
+  el.classList.add('active');
+  filterKw();
+}
+
+function filterKw() {
+  if (!currentData) return;
+  var f = currentData.filter(function(k) {
+    return currentView === 'all' || k.cat === currentView;
+  });
+  renderGrid(f);
+}
+
+var currentSearchKw = '';
+var currentIndName = '';
+
+/* ===== Top3 行业标杆渲染 ===== */
+function renderTop3(indId, indName) {
+  var el = document.getElementById('top3Section');
+  if (!el) return;
+  var list = (typeof getCompaniesForIndustry === 'function') ? getCompaniesForIndustry(indId, indName) : null;
+  if (!list || list.length === 0) {
+    el.style.display = 'none';
+    el.classList.remove('show');
+    return;
+  }
+  var lifecyclePhases = ['初创期','成长期','成熟期','转型期'];
+  var head = '<div class="top3-head">' +
+    '<div class="top3-title">' +
+      '<div class="sect-icon">' +
+        '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<defs><linearGradient id="iconGrad1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00AAB8"/><stop offset="100%" stop-color="#4FC2C8"/></linearGradient></defs>' +
+          // 奖杯图标：三强 trophy
+          '<path d="M6 3h12v2c0 3.3-2.7 6-6 6s-6-2.7-6-6V3z" fill="url(#iconGrad1)" opacity=".95"/>' +
+          '<path d="M6 5H3c0 2 1 4 3 4M18 5h3c0 2-1 4-3 4" stroke="url(#iconGrad1)" stroke-width="1.8" stroke-linecap="round" fill="none"/>' +
+          '<path d="M10 11v3h4v-3" stroke="url(#iconGrad1)" stroke-width="1.8" stroke-linecap="round" fill="none"/>' +
+          '<rect x="7" y="14" width="10" height="2.5" rx="1.25" fill="url(#iconGrad1)"/>' +
+          '<rect x="5.5" y="17.5" width="13" height="3" rx="1.5" fill="url(#iconGrad1)" opacity=".85"/>' +
+          '<circle cx="12" cy="6.5" r="1.2" fill="#fff" opacity=".85"/>' +
+        '</svg>' +
+      '</div>' +
+      '<h2>行业标杆三强<em>· ' + indName + '</em></h2>' +
+    '</div>' +
+    '<div class="top3-sub">生态位 / 护城河 / 生命周期 / 收入结构</div>' +
+  '</div>';
+
+  var cards = list.slice(0,3).map(function(c){
+    var logoSrc = 'https://logo.clearbit.com/' + (c.domain || '');
+    var fb = (c.name || '?').charAt(0);
+    var lifeIdx = (typeof c.lifecycle === 'number') ? c.lifecycle : 1;
+    var lifePct = ((lifeIdx) / (lifecyclePhases.length - 1)) * 100;
+    var tagsHtml = (c.tags || []).map(function(t){return '<span class="cmp-tag">' + t + '</span>';}).join('');
+    var revHtml = (c.revenue || []).map(function(r){
+      return '<div class="cmp-rev-item">' +
+        '<div class="cmp-rev-label">' + r.label + '</div>' +
+        '<div class="cmp-rev-bar-wrap"><div class="cmp-rev-bar" style="--w:' + r.pct + '%;background:' + (r.color || '#f4a7b9') + '"></div></div>' +
+        '<div class="cmp-rev-pct">' + r.pct + '%</div>' +
+      '</div>';
+    }).join('');
+    var stageHtml = lifecyclePhases.map(function(p, i){
+      var cls = i === lifeIdx ? 'active' : (i < lifeIdx ? 'done' : '');
+      return '<div class="cmp-life-stage ' + cls + '"><div class="dot"></div><div class="label">' + p + '</div></div>';
+    }).join('');
+
+    return '<div class="cmp-card">' +
+      '<div class="cmp-head">' +
+        '<div class="cmp-logo">' +
+          '<img src="' + logoSrc + '" alt="' + c.name + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
+          '<div class="fallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center">' + fb + '</div>' +
+        '</div>' +
+        '<div class="cmp-name-wrap">' +
+          '<div class="cmp-name">' + c.name + '</div>' +
+          '<div class="cmp-en">' + (c.enName || '') + '</div>' +
+          '<div class="cmp-niche">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6m11-11h-6M7 12H1"/></svg>' +
+            '生态位 · ' + (c.ecoNiche || '细分领跑') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      (tagsHtml ? '<div class="cmp-tags">' + tagsHtml + '</div>' : '') +
+      '<div class="cmp-moat">' +
+        '<div class="cmp-section-label">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L3 7v6c0 5 4 8 9 9 5-1 9-4 9-9V7l-9-5z"/></svg>' +
+          '核心护城河' +
+        '</div>' +
+        '<div class="cmp-moat-pro">' + (c.moatPro || '') + '</div>' +
+        '<div class="cmp-moat-ez">' + (c.moatEz || '') + '</div>' +
+      '</div>' +
+      '<div class="cmp-life">' +
+        '<div class="cmp-section-label">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>' +
+          '企业生命周期' +
+        '</div>' +
+        '<div class="cmp-life-track">' +
+          '<div class="cmp-life-stages">' + stageHtml + '</div>' +
+        '</div>' +
+      '</div>' +
+      (revHtml ? '<div class="cmp-rev">' +
+        '<div class="cmp-section-label">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="8" width="7" height="13" rx="1"/></svg>' +
+          '收入结构' +
+        '</div>' + revHtml + '</div>' : '') +
+      (c.domain ? '<a class="cmp-visit" href="https://' + c.domain + '" target="_blank" rel="noopener">' +
+        '访问官网' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 17L17 7M9 7h8v8"/></svg>' +
+      '</a>' : '') +
+    '</div>';
+  }).join('');
+
+  el.innerHTML = head + '<div class="top3-grid">' + cards + '</div>';
+  el.style.display = 'block';
+  // 强制重绘触发过渡
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ el.classList.add('show'); });
+  });
+}
+
+function renderGrid(data) {
+  var el = document.getElementById('kwGrid');
+  var catNames = {core:'核心概念', finance:'财务指标', tech:'技术术语', biz:'商业模型'};
+  var hlWords = [];
+  if (currentSearchKw) hlWords.push(currentSearchKw);
+  if (currentIndName && currentIndName !== currentSearchKw) hlWords.push(currentIndName);
+  var hl = typeof highlightText === 'function' ? highlightText : function(t){return t;};
+
+  el.innerHTML = data.map(function(kw, i) {
+    var stripClass = 'kw-strip kw-strip-' + (kw.cat || 'core');
+    var delay = Math.min(i % 9, 8) * 60;
+    var q = encodeURIComponent(kw.term || '');
+    var refs =
+      '<span class="kw-refs" role="group" aria-label="查阅外部词典">' +
+        '<span class="kw-refs-label">查资料</span>' +
+        '<a class="kw-ref kw-ref-g" href="https://www.google.com/search?q=' + q + '" target="_blank" rel="noopener" title="Google 搜索">Google</a>' +
+        '<a class="kw-ref kw-ref-w" href="https://zh.wikipedia.org/wiki/Special:Search?search=' + q + '" target="_blank" rel="noopener" title="Wikipedia 维基百科">Wiki</a>' +
+      '</span>';
+    return '<div class="kw-card scroll-reveal" data-delay="' + delay + '">' +
+      '<div class="' + stripClass + '"></div>' +
+      '<div class="kw-top">' +
+        '<div class="kw-name">' + hl(kw.term, hlWords) + '</div>' +
+        '<span class="kw-num">#' + (kw.rank || i + 1) + ' · ' + (catNames[kw.cat] || '') + '</span>' +
+      '</div>' +
+      '<div class="kw-body">' +
+        '<div class="kw-section">' +
+          '<div class="kw-label kw-label-pro">' +
+            '<span><span class="dot pro"></span>专业释义</span>' + refs +
+          '</div>' +
+          '<div class="kw-pro-text">' + hl(kw.pro, hlWords) + '</div>' +
+        '</div>' +
+        '<div class="kw-section"><div class="kw-label kw-label-ez"><span class="dot ez"></span>大白话</div><div class="kw-ez-text">' + hl(kw.ez, hlWords) + '</div></div>' +
+      '</div></div>';
+  }).join('');
+  observeScrollReveal();
+}
+
+/* Scroll reveal with IntersectionObserver */
+var revealObserver = null;
+function observeScrollReveal() {
+  if (revealObserver) revealObserver.disconnect();
+  var cards = document.querySelectorAll('.scroll-reveal:not(.revealed)');
+  if (!cards.length) return;
+  revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        var delay = parseInt(el.getAttribute('data-delay') || '0', 10);
+        setTimeout(function() { el.classList.add('revealed'); }, delay);
+        revealObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  cards.forEach(function(card) { revealObserver.observe(card); });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('searchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); doSearch(); }
+  });
+  // 首次加载时如果 URL 里有 hash（刷新/分享链接/收藏），自动恢复结果
+  restoreFromHash();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+# 本地配置（含 API key），不要提交
+config.local.js
+
+# 词库批量生成/补齐脚本（本地一次性用完就扔）
+_gen_*.cjs
+_batch*.cjs
+_enrich_*.cjs
+
+# 词库备份
+_kw_backup/
+
+# Gemini 生成的原始素材图（使用的已经放到 bg-clay.png 和 img/ 里）
+Gemini_Generated_Image_*.png
+
+# 系统
+.DS_Store
+node_modules/
+*.log
+
+# 浏览器自动化缓存
+.playwright-cli/
+

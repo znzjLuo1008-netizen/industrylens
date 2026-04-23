@@ -1,0 +1,23 @@
+/* IndustryLens — 在线教育 关键词百科 */
+KEYWORDS_DB['education'] = [
+{rank:1,cat:'core',term:"K12",pro:"从幼儿园到高中。2021年双减政策后K12学科培训受限，转型素质教育。",ez:"小学到高中的教育。"},
+{rank:2,cat:'biz',term:"职业教育",pro:"针对成人的技能培训。IT编程/考公/考研是三大主力。",ez:"毕业后的补习。"},
+{rank:3,cat:'biz',term:"OMO模式",pro:"Online-Merge-Offline，线上线下融合。新东方转型文旅+直播是代表。",ez:"线上课+线下面授。"},
+{rank:4,cat:'finance',term:"续费率",pro:"续报率是教育公司核心指标。健康值>70%。",ez:"学生学完一期还继续学的比例。"},
+{rank:5,cat:'biz',term:"大班课/小班课",pro:"大班课（1000+学生/班）边际成本低但互动差；小班课反之。",ez:"几个学生一起上课。"},
+{rank:6,cat:'tech',term:"直播课 vs 录播课",pro:"直播课=实时互动高但成本高；录播课=标准化但互动差。",ez:"老师实时讲 vs 预录的视频。"},
+{rank:7,cat:'core',term:"双减政策",pro:"2021年出台，K12学科培训转非营利。头部公司市值蒸发90%+。",ez:"国家管K12培训。"},
+{rank:8,cat:'biz',term:"知识付费",pro:"得到/樊登读书/喜马拉雅。ARPU 200-500元/年。",ez:"花钱买知识。"},
+{rank:9,cat:'tech',term:"AI教育",pro:"AI口语陪练/作业批改。科大讯飞、猿辅导都在发力。",ez:"AI当家教。"},
+{rank:10,cat:'core',term:"MOOC",pro:"Massive Open Online Course，大规模开放在线课程。",ez:"国际大学公开课。"},
+{rank:11,cat:'finance',term:"LTV/CAC",pro:"教育行业健康比值>3。获客贵是痛点。",ez:"学生贡献收入/获客成本。"},
+{rank:12,cat:'biz',term:"教研体系",pro:"课程研发能力。好未来教研团队超2000人。",ez:"老师怎么备课的体系。"},
+{rank:13,cat:'biz',term:"名师 vs 体系",pro:"名师驱动（新东方早期）vs 标准化体系驱动（学而思）。后者更易复制。",ez:"靠明星老师还是标准化内容。"},
+{rank:14,cat:'biz',term:"考研/考公",pro:"中公教育、粉笔是龙头。年收入百亿规模。",ez:"成人最大的两个培训市场。"},
+{rank:15,cat:'biz',term:"留学咨询",pro:"新东方前途出国、启德。客单价3-10万元。",ez:"申请国外大学的中介。"},
+{rank:16,cat:'biz',term:"素质教育",pro:"艺术/编程/体育等非学科。双减后的新风口。",ez:"非学科的兴趣培训。"},
+{rank:17,cat:'tech',term:"学习APP",pro:"作业帮/小猿搜题/多邻国。DAU过千万。",ez:"手机上学习的软件。"},
+{rank:18,cat:'biz',term:"企业培训",pro:"B端教育市场。云学堂、酷学院等。",ez:"公司给员工的培训。"},
+{rank:19,cat:'finance',term:"教师薪酬",pro:"占在线教育成本30-40%。名师年薪千万级。",ez:"老师工资是大头。"},
+{rank:20,cat:'finance',term:"退费率",pro:"学员中途退款比例。影响LTV测算。",ez:"学生中途不学要退钱。"},
+];
