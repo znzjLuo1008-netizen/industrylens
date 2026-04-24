@@ -346,10 +346,10 @@ input{font-family:inherit;color:inherit}
   background:rgba(255,255,255,0.78);
   backdrop-filter:blur(10px);
   border:1px solid rgba(26,26,34,0.1);
-  padding:10px 14px;border-radius:14px;
+  padding:8px 16px;border-radius:12px;
   cursor:pointer;transition:all .25s cubic-bezier(0.16,1,0.3,1);
   letter-spacing:-.005em;
-  flex:1;min-width:0;text-align:center;
+  white-space:nowrap;flex-shrink:0;
   box-shadow:0 2px 8px rgba(0,170,184,0.06);
 }
 .hot-chip:hover{
@@ -1118,7 +1118,7 @@ input{font-family:inherit;color:inherit}
 <script src="synonyms.js?v=20260422"></script>
 <!-- ===== AI 服务（本地 key + DeepSeek 流式 + 缓存） ===== -->
 <script src="config.local.js?v=2"></script>
-<script src="ai-service.js?v=14"></script>
+<script src="ai-service.js?v=15"></script>
 <script>
 if (typeof KEYWORDS_DB === 'undefined') { var KEYWORDS_DB = {}; }
 
