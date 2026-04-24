@@ -484,17 +484,17 @@ input{font-family:inherit;color:inherit}
 .rh-pill.active{border-color:transparent;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p3));box-shadow:0 6px 20px rgba(0,170,184,0.22),inset 0 1px 0 rgba(255,255,255,0.2)}
 
 /* ===== KEYWORD CARDS ===== */
-/* 关键词区标题 — 居中两行布局 */
-.kw-section-title{max-width:1200px;margin:0 auto 0;padding:22px 32px 18px;position:relative;z-index:2;
-  display:flex;flex-direction:column;align-items:center;gap:14px;
+/* 关键词区标题 — 居中两行布局，轻透毛玻璃 */
+.kw-section-title{max-width:1200px;margin:0 auto 0;padding:18px 28px 14px;position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
   border-radius:20px;
-  background:rgba(255,255,255,0.88);
+  background:rgba(255,255,255,0.55);
   backdrop-filter:blur(24px) saturate(140%);
   -webkit-backdrop-filter:blur(24px) saturate(140%);
-  border:1px solid rgba(255,255,255,0.92);
+  border:1px solid rgba(255,255,255,0.7);
   box-shadow:
-    0 1px 3px rgba(0,0,0,0.04),
-    0 8px 28px -12px rgba(0,170,184,0.12)}
+    0 1px 3px rgba(0,0,0,0.03),
+    0 8px 28px -12px rgba(0,170,184,0.08)}
 /* 第一行：图标 + 标题 + 行业名 + 术语数，水平居中 */
 .kw-section-title .kst-top-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
 .kw-section-title .kst-icon-wrap{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;
@@ -1227,7 +1227,7 @@ input{font-family:inherit;color:inherit}
 <script src="synonyms.js?v=20260422"></script>
 <!-- ===== AI 服务（本地 key + DeepSeek 流式 + 缓存） ===== -->
 <script src="config.local.js?v=2"></script>
-<script src="ai-service.js?v=8"></script>
+<script src="ai-service.js?v=9"></script>
 <script>
 if (typeof KEYWORDS_DB === 'undefined') { var KEYWORDS_DB = {}; }
 
