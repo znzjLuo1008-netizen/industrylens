@@ -1115,12 +1115,49 @@ input{font-family:inherit;color:inherit}
 
 <script src="keywords.js?v=6"></script>
 <script src="companies.js?v=20260424"></script>
+<script src="preloaded_data.js?v=1"></script>
 <script src="synonyms.js?v=20260422"></script>
 <!-- ===== AI 服务（本地 key + DeepSeek 流式 + 缓存） ===== -->
 <script src="config.local.js?v=2"></script>
-<script src="ai-service.js?v=15"></script>
+<script src="ai-service.js?v=16"></script>
 <script>
 if (typeof KEYWORDS_DB === 'undefined') { var KEYWORDS_DB = {}; }
+
+/* ===== 预生成数据注入（109行业秒开） ===== */
+(function(){
+  if (!window.PRELOADED_DATA) return;
+  try {
+    Object.keys(window.PRELOADED_DATA).forEach(function(indId){
+      var d = window.PRELOADED_DATA[indId];
+      if (!d) return;
+      // 注入关键词
+      if (Array.isArray(d.keywords) && d.keywords.length > 0) {
+        KEYWORDS_DB[indId] = d.keywords.map(function(k, i){
+          return { rank: k.rank || (i+1), cat: k.cat || 'core', term: k.term || '', pro: k.pro || '', ez: k.ez || '' };
+        });
+      }
+      // 注入公司
+      if (Array.isArray(d.companies) && d.companies.length > 0) {
+        window.COMPANIES_DB = window.COMPANIES_DB || {};
+        window.COMPANIES_DB[indId] = d.companies.map(function(c){
+          return {
+            name: c.name || '', enName: c.enName || '', domain: c.domain || '',
+            ecoNiche: c.ecoNiche || '生态参与者', tags: Array.isArray(c.tags) ? c.tags : [],
+            moatPro: c.moatPro || '', moatEz: c.moatEz || '',
+            lifecycle: typeof c.lifecycle === 'number' ? c.lifecycle : 2,
+            lifeLabel: c.lifeLabel || ['初创期','成长期','成熟期','转型期'][c.lifecycle || 2],
+            revenue: Array.isArray(c.revenue) ? c.revenue : []
+          };
+        });
+      }
+      // 补充行业名称
+      if (d.industry && d.industry.name && window.INDUSTRY_MAP && window.INDUSTRY_MAP[indId]) {
+        window.INDUSTRY_MAP[indId].name = d.industry.name;
+      }
+    });
+    console.log('[IndustryLens] Preloaded ' + Object.keys(window.PRELOADED_DATA).length + ' industries into local DBs');
+  } catch(e) { console.warn('[IndustryLens] Preload inject failed', e); }
+})();
 
 /* ===== 一次性清除旧版缓存（v12升级：全量AI重生成） ===== */
 (function(){
