@@ -589,10 +589,31 @@ input{font-family:inherit;color:inherit}
 .cmp-section-label{display:flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:.7rem;
   font-weight:700;background:linear-gradient(135deg,#00AAB8,#4FC2C8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
 .cmp-section-label svg{width:12px;height:12px;stroke-width:2;stroke:#00AAB8;flex-shrink:0}
-.cmp-moat-pro{font-size:.84rem;line-height:1.7;color:#2a2530;letter-spacing:-.005em;margin-bottom:10px;font-weight:500}
-.cmp-moat-ez{font-size:.8rem;line-height:1.7;color:#1a3538;letter-spacing:.005em;padding:11px 14px;
-  background:linear-gradient(135deg,rgba(230,244,241,0.85),rgba(219,243,244,0.8));border-radius:10px}
-.cmp-moat-ez::before{content:'白话: ';font-weight:700;background:linear-gradient(135deg,#B8E4E3,#E6F4F1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* 护城河专业版 - 带左边框的卡片 */
+.cmp-moat-pro{
+  font-size:.82rem;line-height:1.8;color:#2a2530;
+  background:linear-gradient(135deg,rgba(0,170,184,0.04),rgba(79,194,200,0.06));
+  border-left:3px solid #00AAB8;border-radius:0 10px 10px 0;
+  padding:12px 14px;margin-bottom:10px;
+  letter-spacing:-.003em;
+}
+/* 护城河白话版 - 温暖的橙色卡片 */
+.cmp-moat-ez{
+  font-size:.8rem;line-height:1.8;color:#5a3820;
+  background:linear-gradient(135deg,rgba(255,210,160,0.35),rgba(255,235,200,0.4));
+  border-radius:10px;padding:11px 14px;
+  border:1px solid rgba(255,180,100,0.2);
+  position:relative;overflow:hidden;
+}
+.cmp-moat-ez::before{
+  content:'';position:absolute;top:-10px;left:-10px;width:50px;height:50px;
+  background:radial-gradient(circle,rgba(255,180,100,0.2),transparent 70%);
+  pointer-events:none;
+}
+.cmp-moat-ez::after{
+  content:'💬';position:absolute;top:8px;right:12px;font-size:.9rem;opacity:.6;
+}
+.cmp-moat-ez-inner{padding-right:20px}
 
 .cmp-life{margin-bottom:18px;position:relative;z-index:1}
 .cmp-life-track{position:relative;margin:10px 4px 14px;padding-top:8px}
@@ -1983,7 +2004,7 @@ function renderTop3(indId, indName) {
           '核心护城河' +
         '</div>' +
         '<div class="cmp-moat-pro">' + (c.moatPro || '') + '</div>' +
-        '<div class="cmp-moat-ez">' + (c.moatEz || '') + '</div>' +
+        '<div class="cmp-moat-ez"><div class="cmp-moat-ez-inner">' + (c.moatEz || '') + '</div></div>' +
       '</div>' +
       '<div class="cmp-life">' +
         '<div class="cmp-section-label">' +
