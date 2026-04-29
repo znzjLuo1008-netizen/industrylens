@@ -546,13 +546,14 @@ input{font-family:inherit;color:inherit}
 .top3-title h2{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:#2a2a35;letter-spacing:-.02em}
 .top3-title h2 em{font-style:normal;background:linear-gradient(135deg,#00AAB8,#7FD3D6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;font-size:.95rem;margin-left:8px}
 .top3-sub{font-size:.82rem;color:#6a5560;letter-spacing:.01em;font-weight:500}
-.top3-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;z-index:1}
+.top3-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;z-index:1;align-items:start}
 
 .cmp-card{background:linear-gradient(180deg,#ffffff,#fdf9fb);
   border:1px solid rgba(0,170,184,0.1);border-radius:20px;padding:24px;
-  transition:all .4s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden;
+  transition:all .4s cubic-bezier(0.16,1,0.3,1);position:relative;
   opacity:0;transform:translateY(18px);
-  box-shadow:0 1px 3px rgba(0,0,0,0.02)}
+  box-shadow:0 1px 3px rgba(0,0,0,0.02);
+  min-height:0}
 .top3-section.show .cmp-card{opacity:1;transform:translateY(0)}
 .top3-section.show .cmp-card:nth-child(1){transition-delay:.05s}
 .top3-section.show .cmp-card:nth-child(2){transition-delay:.15s}
@@ -627,7 +628,8 @@ input{font-family:inherit;color:inherit}
 
 @media (max-width:960px){
   .top3-grid{grid-template-columns:1fr}
-  .top3-section{padding:24px;border-radius:20px}
+  .top3-section{padding:24px;border-radius:20px;overflow:visible}
+  .cmp-card{overflow:visible}
 }
 .kw-card{position:relative;background:#fff;border-radius:18px;overflow:hidden;transition:all .4s var(--ease-out);box-shadow:0 1px 2px rgba(0,0,0,0.03),0 2px 8px rgba(0,170,184,0.04);border:1px solid rgba(0,170,184,0.08)}
 .kw-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
@@ -647,25 +649,21 @@ input{font-family:inherit;color:inherit}
 .kw-label{font-family:var(--font-display);font-size:.66rem;font-weight:700;letter-spacing:.14em;margin-bottom:9px;display:flex;align-items:center;gap:7px;text-transform:uppercase}
 .kw-label-pro{color:#006a75}
 .kw-label-ez{color:#d47e52}
+.kw-label-ref{color:#6b5c95}
+.kw-label-ind{color:#c45a2e}
 .kw-label .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 2px #fff}
 .kw-label .dot.pro{background:linear-gradient(135deg,#00AAB8,#4FC2C8)}
 .kw-label .dot.ez{background:linear-gradient(135deg,#B8E4E3,#E6F4F1)}
+.kw-label .dot.ref{background:linear-gradient(135deg,#9b8ec4,#c5b8e8)}
+.kw-label .dot.ind{background:linear-gradient(135deg,#e07850,#f0a882)}
 .kw-pro-text{font-size:.87rem;color:#3a3540;line-height:1.85;letter-spacing:-.005em}
 .kw-pro-text mark{background:linear-gradient(180deg,transparent 60%,rgba(0,170,184,0.2) 60%);color:#006a75;padding:0 2px;font-weight:600}
-/* ===== 外链跳查组（Google / Wikipedia / 百度百科） ===== */
-.kw-label-pro{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.kw-refs{
-  display:inline-flex;gap:6px;align-items:center;
-  padding:5px 6px 5px 10px;border-radius:10px;
-  background:linear-gradient(135deg,rgba(0,170,184,0.1),rgba(79,194,200,0.06));
-  border:1px solid rgba(0,170,184,0.2);
-}
-.kw-refs-label{
-  font-size:.65rem;font-weight:700;color:#00606a;letter-spacing:.04em;
-  display:inline-flex;align-items:center;gap:4px;
-}
-.kw-refs-label::before{
-  content:'🔎';font-size:.78rem;
+/* ===== 查资料（独立区块） ===== */
+.kw-section-ref{margin-bottom:12px}
+.kw-label-ref{display:flex;align-items:center;gap:7px}
+.kw-ref-links{
+  display:flex;gap:8px;align-items:center;
+  padding:6px 0 2px;flex-wrap:wrap;
 }
 .kw-ref{
   height:22px;padding:0 9px;border-radius:6px;
@@ -680,12 +678,22 @@ input{font-family:inherit;color:inherit}
 }
 .kw-ref:hover{background:#00AAB8;color:#fff;border-color:#00AAB8;transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,170,184,0.35)}
 .kw-ref:hover::after{opacity:1}
-/* 小屏隐藏 label 文字 */
+/* ===== 专·行业参考数据 ===== */
+.kw-section-ind{margin-bottom:12px}
+.kw-label-ind{display:flex;align-items:center;gap:7px}
+.kw-id-text{
+  font-size:.86rem;color:#4a3530;line-height:1.85;
+  background:linear-gradient(135deg,rgba(224,120,80,0.08) 0%,rgba(240,168,130,0.10) 100%);
+  padding:12px 16px;border-radius:12px;
+  border-left:3px solid #e07850;
+  letter-spacing:-.005em
+}
+.kw-id-text mark{background:rgba(224,120,80,0.2);color:#a04020;padding:1px 4px;border-radius:3px;font-weight:600}
+/* 小屏适配 */
 @media(max-width:520px){
-  .kw-refs{padding:4px 4px 4px 8px}
-  .kw-refs-label{font-size:.6rem}
-  .kw-refs-label::before{font-size:.72rem}
-  .kw-ref{padding:0 6px;font-size:.66rem}
+  .kw-ref{padding:0 7px;font-size:.65rem;height:20px}
+  .kw-id-text{font-size:.82rem;padding:10px 14px}
+  .kw-pro-text{font-size:.83rem}
 }
 .kw-ez-text{position:relative;font-size:.88rem;color:#1a3538;line-height:1.85;
   background:linear-gradient(135deg,rgba(184,228,227,0.35) 0%,rgba(230,244,241,0.4) 100%);
@@ -865,7 +873,7 @@ input{font-family:inherit;color:inherit}
   .search-input{padding:16px 90px 16px 44px;font-size:.92rem}
   .search-btn{height:38px!important;padding:0 12px!important;font-size:.78rem!important}
   /* 外链按钮在小屏幕一直显示（mobile 没 hover） */
-  .kw-refs{opacity:1!important;transform:none!important}
+  .kw-ref{opacity:1!important;transform:none!important}
   .kw-ref{width:24px;height:24px}
 }
 </style>
@@ -1115,11 +1123,11 @@ input{font-family:inherit;color:inherit}
 
 <script src="keywords.js?v=6"></script>
 <script src="companies.js?v=20260424"></script>
-<script src="preloaded_data.js?v=1"></script>
+<script src="preloaded_data.js?v=2"></script>
 <script src="synonyms.js?v=20260422"></script>
 <!-- ===== AI 服务（本地 key + DeepSeek 流式 + 缓存） ===== -->
 <script src="config.local.js?v=2"></script>
-<script src="ai-service.js?v=16"></script>
+<script src="ai-service.js?v=17"></script>
 <script>
 if (typeof KEYWORDS_DB === 'undefined') { var KEYWORDS_DB = {}; }
 
@@ -1133,7 +1141,11 @@ if (typeof KEYWORDS_DB === 'undefined') { var KEYWORDS_DB = {}; }
       // 注入关键词
       if (Array.isArray(d.keywords) && d.keywords.length > 0) {
         KEYWORDS_DB[indId] = d.keywords.map(function(k, i){
-          return { rank: k.rank || (i+1), cat: k.cat || 'core', term: k.term || '', pro: k.pro || '', ez: k.ez || '' };
+          return {
+            rank: k.rank || (i+1), cat: k.cat || 'core', term: k.term || '',
+            pro: k.pro || '', ez: k.ez || '',
+            ref: k.ref || null, industryData: k.industryData || ''
+          };
         });
       }
       // 注入公司
@@ -1403,11 +1415,9 @@ function maybeEnhanceInBackground(kw, indId) {
         if (data && Array.isArray(data.keywords) && data.keywords.length > 0) {
           KEYWORDS_DB[indId] = data.keywords.map(function(k, i){
             return {
-              rank: k.rank || (i+1),
-              cat: k.cat || 'core',
-              term: k.term || '',
-              pro: k.pro || '',
-              ez: k.ez || ''
+              rank: k.rank || (i+1), cat: k.cat || 'core', term: k.term || '',
+              pro: k.pro || '', ez: k.ez || '',
+              ref: k.ref || null, industryData: k.industryData || ''
             };
           });
         }
@@ -1528,11 +1538,9 @@ function runAIGeneration(kw, indId) {
       }
       KEYWORDS_DB[realIndId] = (data.keywords || []).map(function (k, i) {
         return {
-          rank: k.rank || (i + 1),
-          cat: k.cat || 'core',
-          term: k.term || '',
-          pro: k.pro || '',
-          ez: k.ez || ''
+          rank: k.rank || (i + 1), cat: k.cat || 'core', term: k.term || '',
+          pro: k.pro || '', ez: k.ez || '',
+          ref: k.ref || null, industryData: k.industryData || ''
         };
       });
       // 2) 写入 COMPANIES_DB（公司卡片库）
@@ -1724,7 +1732,8 @@ function restoreFromHash() {
       KEYWORDS_DB[indId] = (cached.keywords || []).map(function (k, i) {
         return {
           rank: k.rank || (i + 1), cat: k.cat || 'core',
-          term: k.term || '', pro: k.pro || '', ez: k.ez || ''
+          term: k.term || '', pro: k.pro || '', ez: k.ez || '',
+          ref: k.ref || null, industryData: k.industryData || ''
         };
       });
       window.COMPANIES_DB = window.COMPANIES_DB || {};
@@ -2017,12 +2026,20 @@ function renderGrid(data) {
     var stripClass = 'kw-strip kw-strip-' + (kw.cat || 'core');
     var delay = Math.min(i % 9, 8) * 60;
     var q = encodeURIComponent(kw.term || '');
-    var refs =
-      '<span class="kw-refs" role="group" aria-label="查阅外部词典">' +
-        '<span class="kw-refs-label">查资料</span>' +
-        '<a class="kw-ref kw-ref-g" href="https://www.google.com/search?q=' + q + '" target="_blank" rel="noopener" title="Google 搜索">Google</a>' +
-        '<a class="kw-ref kw-ref-w" href="https://zh.wikipedia.org/wiki/Special:Search?search=' + q + '" target="_blank" rel="noopener" title="Wikipedia 维基百科">Wiki</a>' +
-      '</span>';
+    // ref links — use AI-provided search terms if available
+    var googleQ = (kw.ref && kw.ref.google) ? encodeURIComponent(kw.ref.google) : q;
+    var wikiQ   = (kw.ref && kw.ref.wiki) ? encodeURIComponent(kw.ref.wiki) : q;
+    var refLinks =
+      '<a class="kw-ref kw-ref-g" href="https://www.google.com/search?q=' + googleQ + '" target="_blank" rel="noopener" title="Google 搜索">GOOGLE ↗</a>' +
+      '<a class="kw-ref kw-ref-w" href="https://zh.wikipedia.org/wiki/Special:Search?search=' + wikiQ + '" target="_blank" rel="noopener" title="Wikipedia 维基百科">WIKI ↗</a>';
+    // industryData section (专·行业参考数据)
+    var indSection = '';
+    if (kw.industryData && kw.industryData.length > 10) {
+      indSection = '<div class="kw-section kw-section-ind">' +
+        '<div class="kw-label kw-label-ind"><span class="dot ind"></span>专（行业参考数据）</div>' +
+        '<div class="kw-id-text">' + hl(kw.industryData, hlWords) + '</div>' +
+      '</div>';
+    }
     return '<div class="kw-card scroll-reveal" data-delay="' + delay + '">' +
       '<div class="' + stripClass + '"></div>' +
       '<div class="kw-top">' +
@@ -2031,12 +2048,15 @@ function renderGrid(data) {
       '</div>' +
       '<div class="kw-body">' +
         '<div class="kw-section">' +
-          '<div class="kw-label kw-label-pro">' +
-            '<span><span class="dot pro"></span>专业释义</span>' + refs +
-          '</div>' +
+          '<div class="kw-label kw-label-pro"><span><span class="dot pro"></span>专业释义</span></div>' +
           '<div class="kw-pro-text">' + hl(kw.pro, hlWords) + '</div>' +
         '</div>' +
-        '<div class="kw-section"><div class="kw-label kw-label-ez"><span class="dot ez"></span>大白话</div><div class="kw-ez-text">' + hl(kw.ez, hlWords) + '</div></div>' +
+        '<div class="kw-section kw-section-ref">' +
+          '<div class="kw-label kw-label-ref"><span><span class="dot ref"></span>查资料</span></div>' +
+          '<div class="kw-ref-links">' + refLinks + '</div>' +
+        '</div>' +
+        indSection +
+        '<div class="kw-section"><div class="kw-label kw-label-ez"><span class="dot ez"></span>大白话</span></div><div class="kw-ez-text">' + hl(kw.ez, hlWords) + '</div></div>' +
       '</div></div>';
   }).join('');
   observeScrollReveal();
