@@ -522,16 +522,17 @@ input{font-family:inherit;color:inherit}
 
 /* ===== 行业标杆三强组件 ===== */
 .top3-section{max-width:1200px;margin:0 auto 48px;padding:36px;border-radius:32px;
-  background:rgba(255,255,255,0.55);
+  background:rgba(255,255,255,0.6);
   backdrop-filter:blur(28px) saturate(140%);
   -webkit-backdrop-filter:blur(28px) saturate(140%);
   border:1px solid rgba(255,255,255,0.85);
   box-shadow:
     0 1px 0 rgba(255,255,255,0.9) inset,
-    0 20px 60px -12px rgba(0,170,184,0.14),
+    0 20px 60px -12px rgba(0,170,184,0.12),
     0 8px 24px -4px rgba(100,160,165,0.08),
     0 0 0 1px rgba(0,170,184,0.06);
-  position:relative;overflow:visible}
+  position:relative;overflow:visible;
+  transition:box-shadow .5s ease}
 .top3-section::before{content:'';position:absolute;top:-120px;right:-120px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(0,170,184,0.06),transparent 70%);pointer-events:none}
 .top3-section::after{content:'';position:absolute;bottom:-120px;left:-120px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(184,228,227,0.05),transparent 70%);pointer-events:none}
 .top3-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px;position:relative;z-index:1}
@@ -548,104 +549,124 @@ input{font-family:inherit;color:inherit}
 .top3-sub{font-size:.82rem;color:#6a5560;letter-spacing:.01em;font-weight:500}
 .top3-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;z-index:1;align-items:start}
 
-.cmp-card{background:linear-gradient(180deg,#ffffff,#fdf9fb);
-  border:1px solid rgba(0,170,184,0.1);border-radius:20px;padding:24px;
+.cmp-card{background:#fff;
+  border-radius:24px;padding:0 0 4px;
   transition:all .4s cubic-bezier(0.16,1,0.3,1);position:relative;
   opacity:0;transform:translateY(18px);
-  box-shadow:0 1px 3px rgba(0,0,0,0.02);
-  min-height:0}
+  box-shadow:0 2px 12px rgba(0,0,0,0.04),0 8px 24px rgba(0,170,184,0.06);
+  border:1px solid rgba(0,170,184,0.08);
+  overflow:hidden;min-height:0}
 .top3-section.show .cmp-card{opacity:1;transform:translateY(0)}
 .top3-section.show .cmp-card:nth-child(1){transition-delay:.05s}
 .top3-section.show .cmp-card:nth-child(2){transition-delay:.15s}
 .top3-section.show .cmp-card:nth-child(3){transition-delay:.25s}
-.cmp-card::before{content:'';position:absolute;top:-60px;right:-60px;width:140px;height:140px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,170,184,0.22),transparent 70%);pointer-events:none;transition:all .4s ease;opacity:.7}
-.cmp-card::after{content:'';position:absolute;bottom:-40px;left:-40px;width:110px;height:110px;border-radius:50%;
-  background:radial-gradient(circle,rgba(184,228,227,0.28),transparent 70%);pointer-events:none;transition:all .4s ease;opacity:.6}
-.cmp-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,170,184,0.1),0 4px 12px rgba(79,194,200,0.06);border-color:rgba(0,170,184,0.18)}
-.cmp-card:hover::before{opacity:1;transform:scale(1.2)}
-.cmp-card:hover::after{opacity:1;transform:scale(1.15)}
+/* 顶部彩虹条 */
+.cmp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#00AAB8,#4FC2C8,#7FD3D6,#B8E4E3);
+  border-radius:24px 24px 0 0}
+/* 右上角光晕 */
+.cmp-card::after{content:'';position:absolute;top:-40px;right:-40px;width:100px;height:100px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,170,184,0.12),transparent 70%);pointer-events:none;transition:all .4s ease;opacity:.8}
+.cmp-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,170,184,0.12),0 8px 24px rgba(79,194,200,0.08);border-color:rgba(0,170,184,0.18)}
+.cmp-card:hover::before{height:4px}
+.cmp-card:hover::after{opacity:1;transform:scale(1.2)}
+/* 卡片内边距容器 */
+.cmp-body{padding:20px 20px 4px}
 
-.cmp-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;position:relative;z-index:1}
-.cmp-logo{width:44px;height:44px;border-radius:12px;background:#fff;padding:6px;flex-shrink:0;
-  box-shadow:0 2px 8px rgba(0,170,184,0.08);display:flex;align-items:center;justify-content:center;overflow:hidden;
-  border:1px solid rgba(255,255,255,0.9)}
+.cmp-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;position:relative;z-index:1}
+.cmp-logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(0,170,184,0.08),rgba(184,228,227,0.1));padding:5px;flex-shrink:0;
+  box-shadow:0 2px 10px rgba(0,170,184,0.12);display:flex;align-items:center;justify-content:center;overflow:hidden;
+  border:1px solid rgba(0,170,184,0.15);transition:transform .3s ease}
+.cmp-card:hover .cmp-logo{transform:scale(1.05)}
 .cmp-logo img{width:100%;height:100%;object-fit:contain}
-.cmp-logo .fallback{font-family:var(--font-display);font-weight:700;font-size:1rem;background:linear-gradient(135deg,#00AAB8,#7FD3D6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.cmp-logo .fallback{font-family:var(--font-display);font-weight:700;font-size:1.1rem;background:linear-gradient(135deg,#00AAB8,#7FD3D6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .cmp-name-wrap{flex:1;min-width:0}
-.cmp-name{font-family:var(--font-display);font-size:1.12rem;font-weight:700;color:#1f1f2a;letter-spacing:-.015em;line-height:1.2;margin-bottom:2px}
-.cmp-en{font-size:.74rem;color:#9a8590;letter-spacing:.02em;font-weight:500}
-.cmp-niche{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;
-  font-size:.7rem;font-weight:600;letter-spacing:.02em;
-  background:linear-gradient(135deg,rgba(0,170,184,0.14),rgba(184,228,227,0.16));
-  color:#006a75;border:1px solid rgba(0,170,184,0.22);margin-top:4px;white-space:nowrap}
-.cmp-niche svg{width:10px;height:10px;stroke-width:2}
+.cmp-name{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:#1f1f2a;letter-spacing:-.015em;line-height:1.25;margin-bottom:3px}
+.cmp-en{font-size:.72rem;color:#8a8090;letter-spacing:.03em;font-weight:500;margin-bottom:6px}
+.cmp-niche{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;
+  font-size:.68rem;font-weight:600;letter-spacing:.02em;
+  background:linear-gradient(135deg,rgba(0,170,184,0.12),rgba(79,194,200,0.14));
+  color:#007a85;border:1px solid rgba(0,170,184,0.18);white-space:nowrap;
+  box-shadow:0 2px 6px rgba(0,170,184,0.08)}
+.cmp-niche svg{width:9px;height:9px;stroke-width:2;opacity:.7}
 
-.cmp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;position:relative;z-index:1}
-.cmp-tag{font-size:.7rem;padding:3px 10px;border-radius:6px;background:rgba(255,255,255,0.7);
-  border:1px solid rgba(0,170,184,0.14);color:#5a4a55;letter-spacing:.01em;font-weight:600}
+.cmp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;position:relative;z-index:1}
+.cmp-tag{font-size:.68rem;padding:3px 9px;border-radius:20px;
+  background:rgba(0,170,184,0.08);border:1px solid rgba(0,170,184,0.15);
+  color:#007a85;letter-spacing:.01em;font-weight:600;transition:all .2s ease}
+.cmp-tag:hover{background:rgba(0,170,184,0.15);transform:translateY(-1px)}
 
 .cmp-moat{margin-bottom:16px;position:relative;z-index:1}
 .cmp-section-label{display:flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:.7rem;
-  font-weight:700;background:linear-gradient(135deg,#00AAB8,#4FC2C8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+  font-weight:700;background:linear-gradient(135deg,#00AAB8,#4FC2C8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
 .cmp-section-label svg{width:12px;height:12px;stroke-width:2;stroke:#00AAB8;flex-shrink:0}
-/* 护城河专业版 - 带左边框的卡片 */
+/* 护城河专业版 - 清爽的青色卡片 */
 .cmp-moat-pro{
-  font-size:.82rem;line-height:1.8;color:#2a2530;
-  background:linear-gradient(135deg,rgba(0,170,184,0.04),rgba(79,194,200,0.06));
-  border-left:3px solid #00AAB8;border-radius:0 10px 10px 0;
-  padding:12px 14px;margin-bottom:10px;
-  letter-spacing:-.003em;
+  font-size:.8rem;line-height:1.85;color:#1a4045;
+  background:linear-gradient(135deg,rgba(0,170,184,0.06),rgba(184,228,227,0.08));
+  border-left:3px solid #00AAB8;border-radius:0 14px 14px 0;
+  padding:12px 14px;margin-bottom:10px;letter-spacing:-.003em;
+  position:relative;
 }
-/* 护城河白话版 - 温暖的橙色卡片 */
+/* 专业视角标签 */
+.cmp-moat-pro::before{
+  content:'🛡️ 专业视角';display:flex;align-items:center;gap:5px;
+  font-size:.64rem;font-weight:700;color:#008a99;letter-spacing:.06em;
+  margin-bottom:8px;opacity:.85;
+}
+/* 护城河白话版 - 温暖的珊瑚橙卡片 */
 .cmp-moat-ez{
-  font-size:.8rem;line-height:1.8;color:#5a3820;
-  background:linear-gradient(135deg,rgba(255,210,160,0.35),rgba(255,235,200,0.4));
-  border-radius:10px;padding:11px 14px;
-  border:1px solid rgba(255,180,100,0.2);
+  font-size:.8rem;line-height:1.85;color:#5a3820;
+  background:linear-gradient(135deg,rgba(255,210,160,0.3),rgba(255,235,200,0.38));
+  border-radius:14px;padding:12px 14px;
+  border:1px solid rgba(255,180,100,0.22);
   position:relative;overflow:hidden;
 }
+/* 说人话标签 */
 .cmp-moat-ez::before{
-  content:'';position:absolute;top:-10px;left:-10px;width:50px;height:50px;
-  background:radial-gradient(circle,rgba(255,180,100,0.2),transparent 70%);
-  pointer-events:none;
+  content:'💬 说人话';display:flex;align-items:center;gap:5px;
+  font-size:.64rem;font-weight:700;color:#c06830;letter-spacing:.06em;
+  margin-bottom:8px;opacity:.9;
 }
 .cmp-moat-ez::after{
-  content:'💬';position:absolute;top:8px;right:12px;font-size:.9rem;opacity:.6;
+  content:'';position:absolute;top:-15px;right:-15px;width:60px;height:60px;
+  background:radial-gradient(circle,rgba(255,180,100,0.15),transparent 70%);
+  pointer-events:none;
 }
-.cmp-moat-ez-inner{padding-right:20px}
+.cmp-moat-ez-inner{padding-right:0}
 
-.cmp-life{margin-bottom:18px;position:relative;z-index:1}
-.cmp-life-track{position:relative;margin:10px 4px 14px;padding-top:8px}
+.cmp-life{margin-bottom:16px;position:relative;z-index:1}
+.cmp-life-track{position:relative;margin:10px 4px 12px;padding-top:8px}
 /* 底部连接线 */
-.cmp-life-track::before{content:'';position:absolute;left:8px;right:8px;top:14px;height:1.5px;
-  background:linear-gradient(90deg,rgba(0,170,184,0.15),rgba(79,194,200,0.2),rgba(184,228,227,0.2),rgba(200,200,210,0.18))}
+.cmp-life-track::before{content:'';position:absolute;left:8px;right:8px;top:14px;height:2px;
+  background:linear-gradient(90deg,rgba(0,170,184,0.2),rgba(79,194,200,0.25),rgba(184,228,227,0.2),rgba(200,200,210,0.15))}
 .cmp-life-stages{display:flex;justify-content:space-between;position:relative}
-.cmp-life-stage{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;position:relative;z-index:1}
-.cmp-life-stage .dot{width:10px;height:10px;border-radius:50%;background:#fff;border:1.5px solid rgba(200,200,210,0.4);
-  transition:all .4s ease}
-.cmp-life-stage .label{font-size:.68rem;color:#a8a0a8;letter-spacing:.02em;font-weight:500;white-space:nowrap;transition:all .3s}
+.cmp-life-stage{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;position:relative;z-index:1}
+.cmp-life-stage .dot{width:10px;height:10px;border-radius:50%;background:#fff;border:1.5px solid rgba(0,170,184,0.3);
+  transition:all .4s ease;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+.cmp-life-stage .label{font-size:.65rem;color:#8a8090;letter-spacing:.02em;font-weight:500;white-space:nowrap;transition:all .3s;text-align:center}
 .cmp-life-stage.active .dot{width:14px;height:14px;margin-top:-2px;background:linear-gradient(135deg,#00AAB8,#4FC2C8);border-color:#fff;
-  box-shadow:0 0 0 3px rgba(0,170,184,0.18),0 4px 10px rgba(0,170,184,0.35)}
-.cmp-life-stage.active .label{font-weight:700;font-size:.72rem;
+  box-shadow:0 0 0 3px rgba(0,170,184,0.18),0 4px 12px rgba(0,170,184,0.3)}
+.cmp-life-stage.active .label{font-weight:700;font-size:.68rem;
   background:linear-gradient(135deg,#00AAB8,#4FC2C8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .cmp-life-stage.done .dot{background:linear-gradient(135deg,rgba(0,170,184,0.5),rgba(79,194,200,0.5));border-color:#fff}
 
-.cmp-rev{position:relative;z-index:1}
-.cmp-rev-item{display:flex;align-items:center;gap:10px;margin-bottom:7px}
-.cmp-rev-label{font-size:.76rem;color:#3a3540;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.005em;font-weight:500}
-.cmp-rev-bar-wrap{flex:1.2;height:6px;background:rgba(0,170,184,0.08);border-radius:3px;overflow:hidden;position:relative}
-.cmp-rev-bar{height:100%;border-radius:3px;transition:width .8s cubic-bezier(0.16,1,0.3,1);width:0}
+.cmp-rev{position:relative;z-index:1;padding-bottom:4px}
+.cmp-rev-item{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.cmp-rev-label{font-size:.75rem;color:#3a3540;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.005em;font-weight:500}
 .top3-section.show .cmp-rev-bar{width:var(--w,0%)}
-.cmp-rev-pct{font-family:var(--font-display);font-size:.78rem;font-weight:700;color:#1f1f2a;width:40px;text-align:right;letter-spacing:-.01em}
+.cmp-rev-bar-wrap{flex:1.2;height:8px;background:rgba(0,170,184,0.06);border-radius:6px;overflow:hidden;position:relative}
+.cmp-rev-bar{height:100%;border-radius:6px;transition:width .8s cubic-bezier(0.16,1,0.3,1);width:0;
+  background:linear-gradient(90deg,#00AAB8,#4FC2C8)}
+.cmp-rev-pct{font-family:var(--font-display);font-size:.75rem;font-weight:700;color:#1f1f2a;width:42px;text-align:right;letter-spacing:-.01em}
 
-.cmp-visit{display:inline-flex;align-items:center;gap:6px;margin-top:18px;padding:9px 16px;border-radius:10px;
-  background:linear-gradient(135deg,#00AAB8 0%,#4FC2C8 50%,#7FD3D6 100%);color:#fff;
+.cmp-visit{display:inline-flex;align-items:center;gap:6px;margin:4px 20px 20px;padding:9px 16px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(0,170,184,0.1),rgba(79,194,200,0.12));color:#007a85;
   font-size:.8rem;font-weight:600;text-decoration:none;letter-spacing:.01em;transition:all .3s ease;position:relative;z-index:1;
-  box-shadow:0 4px 12px rgba(0,170,184,0.25)}
-.cmp-visit:hover{transform:translateX(3px) translateY(-1px);box-shadow:0 8px 20px rgba(0,170,184,0.4);background:linear-gradient(135deg,#00AAB8 0%,#7FD3D6 50%,#B8E4E3 100%)}
-.cmp-visit svg{width:12px;height:12px;stroke-width:2.5;stroke:#fff}
-.cmp-visit:hover svg{transform:translate(2px,-2px)}
+  border:1px solid rgba(0,170,184,0.2)}
+.cmp-visit:hover{transform:translateX(3px) translateY(-1px);box-shadow:0 6px 18px rgba(0,170,184,0.25);background:linear-gradient(135deg,#00AAB8,#7FD3D6);color:#fff;border-color:#00AAB8}
+.cmp-visit svg{width:12px;height:12px;stroke-width:2.5;stroke:#007a85;transition:stroke .3s}
+.cmp-visit:hover svg{stroke:#fff;transform:translate(2px,-2px)}
 
 @media (max-width:960px){
   .top3-grid{grid-template-columns:1fr}
@@ -2018,6 +2039,7 @@ function renderTop3(indId, indName) {
     }).join('');
 
     return '<div class="cmp-card">' +
+      '<div class="cmp-body">' +
       '<div class="cmp-head">' +
         '<div class="cmp-logo">' +
           '<img src="' + logoSrc + '" alt="' + c.name + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' +
@@ -2028,7 +2050,7 @@ function renderTop3(indId, indName) {
           '<div class="cmp-en">' + (c.enName || '') + '</div>' +
           '<div class="cmp-niche">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6m11-11h-6M7 12H1"/></svg>' +
-            '生态位 · ' + (c.ecoNiche || '细分领跑') +
+            (c.ecoNiche || '细分领跑') +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -2039,7 +2061,7 @@ function renderTop3(indId, indName) {
           '核心护城河' +
         '</div>' +
         '<div class="cmp-moat-pro">' + (c.moatPro || '') + '</div>' +
-        '<div class="cmp-moat-ez"><div class="cmp-moat-ez-inner">' + (c.moatEz || '') + '</div></div>' +
+        '<div class="cmp-moat-ez">' + (c.moatEz || '') + '</div>' +
       '</div>' +
       '<div class="cmp-life">' +
         '<div class="cmp-section-label">' +
@@ -2055,6 +2077,7 @@ function renderTop3(indId, indName) {
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="8" width="7" height="13" rx="1"/></svg>' +
           '收入结构' +
         '</div>' + revHtml + '</div>' : '') +
+      '</div>' +
       (c.domain ? '<a class="cmp-visit" href="https://' + c.domain + '" target="_blank" rel="noopener">' +
         '访问官网' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 17L17 7M9 7h8v8"/></svg>' +
