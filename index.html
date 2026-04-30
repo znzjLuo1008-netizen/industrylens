@@ -555,7 +555,7 @@ input{font-family:inherit;color:inherit}
   opacity:0;transform:translateY(18px);
   box-shadow:0 2px 12px rgba(0,0,0,0.04),0 8px 24px rgba(0,170,184,0.06);
   border:1px solid rgba(0,170,184,0.08);
-  overflow:hidden;min-height:0}
+  overflow:visible;min-height:0}
 .top3-section.show .cmp-card{opacity:1;transform:translateY(0)}
 .top3-section.show .cmp-card:nth-child(1){transition-delay:.05s}
 .top3-section.show .cmp-card:nth-child(2){transition-delay:.15s}
@@ -580,14 +580,16 @@ input{font-family:inherit;color:inherit}
 .cmp-card:hover .cmp-logo{transform:scale(1.05)}
 .cmp-logo img{width:100%;height:100%;object-fit:contain}
 .cmp-logo .fallback{font-family:var(--font-display);font-weight:700;font-size:1.1rem;background:linear-gradient(135deg,#00AAB8,#7FD3D6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.cmp-name-wrap{flex:1;min-width:0}
+.cmp-name-wrap{flex:1;min-width:0;overflow:visible}
 .cmp-name{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:#1f1f2a;letter-spacing:-.015em;line-height:1.25;margin-bottom:3px}
 .cmp-en{font-size:.72rem;color:#8a8090;letter-spacing:.03em;font-weight:500;margin-bottom:6px}
 .cmp-niche{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;
   font-size:.68rem;font-weight:600;letter-spacing:.02em;
   background:linear-gradient(135deg,rgba(0,170,184,0.12),rgba(79,194,200,0.14));
-  color:#007a85;border:1px solid rgba(0,170,184,0.18);white-space:nowrap;
-  box-shadow:0 2px 6px rgba(0,170,184,0.08)}
+  color:#007a85;border:1px solid rgba(0,170,184,0.18);
+  box-shadow:0 2px 6px rgba(0,170,184,0.08);
+  white-space:normal;max-width:100%;overflow:visible;
+  word-break:break-word;line-height:1.4}
 .cmp-niche svg{width:9px;height:9px;stroke-width:2;opacity:.7}
 
 .cmp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;position:relative;z-index:1}
