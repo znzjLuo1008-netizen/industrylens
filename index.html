@@ -610,6 +610,10 @@ input{font-family:inherit;color:inherit}
   padding:12px 14px;margin-bottom:10px;letter-spacing:-.003em;
   position:relative;
 }
+/* 编号列表换行 */
+.cmp-moat-pro br,.cmp-moat-ez br{display:block;content:''}
+.cmp-moat-pro .num-item,.cmp-moat-ez .num-item{display:block;margin-top:6px}
+.cmp-moat-pro .num-item:first-child,.cmp-moat-ez .num-item:first-child{margin-top:0}
 /* 专业视角标签 */
 .cmp-moat-pro::before{
   content:'🛡️ 专业视角';display:flex;align-items:center;gap:5px;
@@ -2082,8 +2086,8 @@ function renderTop3(indId, indName) {
         '<div class="cmp-section-label">' +
           '🏰 核心护城河' +
         '</div>' +
-        '<div class="cmp-moat-pro">' + (c.moatPro || '') + '</div>' +
-        '<div class="cmp-moat-ez">' + (c.moatEz || '') + '</div>' +
+        '<div class="cmp-moat-pro">' + fmtList(c.moatPro || '') + '</div>' +
+        '<div class="cmp-moat-ez">' + fmtList(c.moatEz || '') + '</div>' +
       '</div>' +
       '<div class="cmp-life">' +
         '<div class="cmp-section-label">' +
@@ -2111,6 +2115,11 @@ function renderTop3(indId, indName) {
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){ el.classList.add('show'); });
   });
+}
+
+// Helper: 给编号列表加换行（1) 2) 3) 自动换行）
+function fmtList(html) {
+  return (html || '').replace(/(\d+[.)]\s*)/g, '<br>$1');
 }
 
 function renderGrid(data) {
