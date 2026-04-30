@@ -1145,6 +1145,7 @@ input{font-family:inherit;color:inherit}
 <script src="keywords.js?v=6"></script>
 <script src="companies.js?v=20260424"></script>
 <script src="preloaded_data.js?v=3"></script>
+<script src="preloaded_data_v4.js?v=1"></script>
 <script src="synonyms.js?v=20260422"></script>
 <!-- ===== AI 服务（本地 key + DeepSeek 流式 + 缓存） ===== -->
 <script src="config.local.js?v=2"></script>
@@ -1152,44 +1153,78 @@ input{font-family:inherit;color:inherit}
 <script>
 if (typeof KEYWORDS_DB === 'undefined') { var KEYWORDS_DB = {}; }
 
-/* ===== 预生成数据注入（109行业秒开） ===== */
+/* ===== 预生成数据注入（v4 100词优先 + v3 30词兜底） ===== */
 (function(){
-  if (!window.PRELOADED_DATA) return;
-  try {
-    Object.keys(window.PRELOADED_DATA).forEach(function(indId){
-      var d = window.PRELOADED_DATA[indId];
-      if (!d) return;
-      // 注入关键词
-      if (Array.isArray(d.keywords) && d.keywords.length > 0) {
-        KEYWORDS_DB[indId] = d.keywords.map(function(k, i){
-          return {
-            rank: k.rank || (i+1), cat: k.cat || 'core', term: k.term || '',
-            pro: k.pro || '', ez: k.ez || '',
-            ref: k.ref || null, industryData: k.industryData || ''
-          };
-        });
-      }
-      // 注入公司
-      if (Array.isArray(d.companies) && d.companies.length > 0) {
-        window.COMPANIES_DB = window.COMPANIES_DB || {};
-        window.COMPANIES_DB[indId] = d.companies.map(function(c){
-          return {
-            name: c.name || '', enName: c.enName || '', domain: c.domain || '',
-            ecoNiche: c.ecoNiche || '生态参与者', tags: Array.isArray(c.tags) ? c.tags : [],
-            moatPro: c.moatPro || '', moatEz: c.moatEz || '',
-            lifecycle: typeof c.lifecycle === 'number' ? c.lifecycle : 2,
-            lifeLabel: c.lifeLabel || ['初创期','成长期','成熟期','转型期'][c.lifecycle || 2],
-            revenue: Array.isArray(c.revenue) ? c.revenue : []
-          };
-        });
-      }
-      // 补充行业名称
-      if (d.industry && d.industry.name && window.INDUSTRY_MAP && window.INDUSTRY_MAP[indId]) {
-        window.INDUSTRY_MAP[indId].name = d.industry.name;
-      }
-    });
-    console.log('[IndustryLens] Preloaded ' + Object.keys(window.PRELOADED_DATA).length + ' industries into local DBs');
-  } catch(e) { console.warn('[IndustryLens] Preload inject failed', e); }
+  // v4 100词版本（优先）
+  if (window.PRELOADED_DATA_V4) {
+    try {
+      Object.keys(window.PRELOADED_DATA_V4).forEach(function(indId){
+        var d = window.PRELOADED_DATA_V4[indId];
+        if (!d) return;
+        if (Array.isArray(d.keywords) && d.keywords.length >= 80) {
+          KEYWORDS_DB[indId] = d.keywords.map(function(k, i){
+            return {
+              rank: k.rank || (i+1), cat: k.cat || 'core', term: k.term || '',
+              pro: k.pro || '', ez: k.ez || '',
+              ref: k.ref || null, industryData: k.industryData || ''
+            };
+          });
+        }
+        if (Array.isArray(d.companies) && d.companies.length > 0) {
+          window.COMPANIES_DB = window.COMPANIES_DB || {};
+          window.COMPANIES_DB[indId] = d.companies.map(function(c){
+            return {
+              name: c.name || '', enName: c.enName || '', domain: c.domain || '',
+              ecoNiche: c.ecoNiche || '生态参与者', tags: Array.isArray(c.tags) ? c.tags : [],
+              moatPro: c.moatPro || '', moatEz: c.moatEz || '',
+              lifecycle: typeof c.lifecycle === 'number' ? c.lifecycle : 2,
+              lifeLabel: c.lifeLabel || ['初创期','成长期','成熟期','转型期'][c.lifecycle || 2],
+              revenue: Array.isArray(c.revenue) ? c.revenue : []
+            };
+          });
+        }
+      });
+      console.log('[IndustryLens] V4预加载 ' + Object.keys(window.PRELOADED_DATA_V4).length + ' 个行业 (100词)');
+    } catch(e) { console.warn('[IndustryLens] V4 preload failed', e); }
+  }
+  // v3 30词版本（兜底，没有v4时用）
+  if (window.PRELOADED_DATA) {
+    try {
+      Object.keys(window.PRELOADED_DATA).forEach(function(indId){
+        // v4已有≥80词则跳过
+        if (KEYWORDS_DB[indId] && KEYWORDS_DB[indId].length >= 80) return;
+        var d = window.PRELOADED_DATA[indId];
+        if (!d) return;
+        if (Array.isArray(d.keywords) && d.keywords.length > 0) {
+          KEYWORDS_DB[indId] = d.keywords.map(function(k, i){
+            return {
+              rank: k.rank || (i+1), cat: k.cat || 'core', term: k.term || '',
+              pro: k.pro || '', ez: k.ez || '',
+              ref: k.ref || null, industryData: k.industryData || ''
+            };
+          });
+        }
+        if (Array.isArray(d.companies) && d.companies.length > 0) {
+          window.COMPANIES_DB = window.COMPANIES_DB || {};
+          if (!window.COMPANIES_DB[indId]) {
+            window.COMPANIES_DB[indId] = d.companies.map(function(c){
+              return {
+                name: c.name || '', enName: c.enName || '', domain: c.domain || '',
+                ecoNiche: c.ecoNiche || '生态参与者', tags: Array.isArray(c.tags) ? c.tags : [],
+                moatPro: c.moatPro || '', moatEz: c.moatEz || '',
+                lifecycle: typeof c.lifecycle === 'number' ? c.lifecycle : 2,
+                lifeLabel: c.lifeLabel || ['初创期','成长期','成熟期','转型期'][c.lifecycle || 2],
+                revenue: Array.isArray(c.revenue) ? c.revenue : []
+              };
+            });
+          }
+        }
+      });
+      console.log('[IndustryLens] V3兜底 ' + Object.keys(window.PRELOADED_DATA).length + ' 个行业 (30词)');
+    } catch(e) { console.warn('[IndustryLens] V3 preload failed', e); }
+  }
+  var totalKw = Object.values(KEYWORDS_DB).reduce(function(s,a){return s+a.length;},0);
+  console.log('[IndustryLens] 共预加载 ' + Object.keys(KEYWORDS_DB).length + ' 个行业，' + totalKw + ' 个关键词');
 })();
 
 /* ===== 一次性清除旧版缓存（v12升级：全量AI重生成） ===== */
