@@ -1805,12 +1805,23 @@ function restoreFromHash() {
   var indId = matchIndustry(kw);
   if (!indId) { indId = '_custom'; INDUSTRY_MAP['_custom'] = {name: kw, tags: [kw]}; }
 
+  // 是否有保存的滚动位置（刷新场景）
+  var savedY = sessionStorage.getItem('il_scrollY_' + kw);
+  var restoreScroll = function() {
+    if (savedY != null) {
+      // 刷新场景：恢复精确滚动位置
+      window.scrollTo({top: parseInt(savedY, 10), behavior: 'auto'});
+      sessionStorage.removeItem('il_scrollY_' + kw);
+    } else {
+      // 分享/前进后退场景：滚到结果顶部
+      scrollToResults(false);
+    }
+  };
+
   var hasLocal = KEYWORDS_DB[indId] && KEYWORDS_DB[indId].length > 0;
   if (hasLocal) {
     showResults(indId, kw);
-    setTimeout(function(){
-      scrollToResults(false);
-    }, 50);
+    setTimeout(restoreScroll, 50);
     return true;
   }
 
@@ -1834,9 +1845,7 @@ function restoreFromHash() {
         INDUSTRY_MAP[indId].name = cached.industry.name;
       }
       showResults(indId, kw);
-      setTimeout(function(){
-        scrollToResults(false);
-      }, 50);
+      setTimeout(restoreScroll, 50);
       return true;
     }
     // 缓存也没有 → 触发生成
@@ -1850,6 +1859,23 @@ function restoreFromHash() {
 }
 window.addEventListener('popstate', function(){ restoreFromHash(); });
 window.addEventListener('hashchange', function(){ restoreFromHash(); });
+
+// 刷新前保存当前 hash 对应的滚动位置（仅当有 hash 时）
+window.addEventListener('beforeunload', function(){
+  var h = location.hash;
+  if (h && h !== '#') {
+    var kw = '';
+    try { kw = decodeURIComponent(h.slice(1)); } catch(e) { kw = h.slice(1); }
+    if (kw) {
+      sessionStorage.setItem('il_scrollY_' + kw, String(window.pageYOffset || window.scrollY || 0));
+    }
+  }
+});
+
+// 禁用浏览器的自动滚动恢复（我们自己接管）
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
 
 function goHome() {
   // 清空 hash + 隐藏结果区 + 恢复首屏 + 回到顶部
