@@ -553,22 +553,19 @@ input{font-family:inherit;color:inherit}
   border-radius:24px;padding:0 0 4px;
   transition:all .4s cubic-bezier(0.16,1,0.3,1);position:relative;
   opacity:0;transform:translateY(18px);
-  box-shadow:0 2px 12px rgba(0,0,0,0.04),0 8px 24px rgba(0,170,184,0.06);
-  border:1px solid rgba(0,170,184,0.08);
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+  border:none;
   overflow:visible;min-height:0}
 .top3-section.show .cmp-card{opacity:1;transform:translateY(0)}
 .top3-section.show .cmp-card:nth-child(1){transition-delay:.05s}
 .top3-section.show .cmp-card:nth-child(2){transition-delay:.15s}
 .top3-section.show .cmp-card:nth-child(3){transition-delay:.25s}
-/* 顶部彩虹条 */
-.cmp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,#00AAB8,#4FC2C8,#7FD3D6,#B8E4E3);
-  border-radius:24px 24px 0 0}
-/* 右上角光晕 */
-.cmp-card::after{content:'';position:absolute;top:-40px;right:-40px;width:100px;height:100px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,170,184,0.12),transparent 70%);pointer-events:none;transition:all .4s ease;opacity:.8}
-.cmp-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,170,184,0.12),0 8px 24px rgba(79,194,200,0.08);border-color:rgba(0,170,184,0.18)}
-.cmp-card:hover::before{height:4px}
+/* 去掉顶部彩虹条 */
+.cmp-card::before{display:none}
+/* 去掉右上角光晕 */
+.cmp-card::after{display:none}
+.cmp-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1);border:none}
+.cmp-card:hover::before{display:none}
 .cmp-card:hover::after{opacity:1;transform:scale(1.2)}
 /* 卡片内边距容器 */
 .cmp-body{padding:20px 20px 4px}
@@ -665,6 +662,7 @@ input{font-family:inherit;color:inherit}
 .cmp-rev-bar{height:100%;border-radius:6px;transition:width .8s cubic-bezier(0.16,1,0.3,1);width:0;
   background:linear-gradient(90deg,#00AAB8,#4FC2C8)}
 .cmp-rev-pct{font-family:var(--font-display);font-size:.75rem;font-weight:700;color:#1f1f2a;width:42px;text-align:right;letter-spacing:-.01em}
+.cmp-rev-empty{font-size:.75rem;color:#999;font-style:italic;padding:8px 12px;background:rgba(0,0,0,0.03);border-radius:8px;text-align:center;letter-spacing:.02em}
 
 .cmp-visit{display:inline-flex;align-items:center;gap:6px;margin:4px 20px 20px;padding:9px 16px;border-radius:14px;
   background:linear-gradient(135deg,rgba(0,170,184,0.1),rgba(79,194,200,0.12));color:#007a85;
@@ -683,81 +681,78 @@ input{font-family:inherit;color:inherit}
 .kw-card::before{display:none}
 .kw-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1);border:none}
 .kw-card:hover::before{display:none}
-.kw-top{padding:16px 18px 2px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.kw-num{font-family:var(--font-display);font-size:.62rem;font-weight:700;letter-spacing:.06em;padding:4px 10px;
-  background:rgba(0,0,0,0.06);color:#333;border-radius:20px;
-  flex-shrink:0;white-space:nowrap;border:none}
-.kw-name{font-family:var(--font-display);font-size:1.1rem;font-weight:700;flex:1;letter-spacing:-.02em;line-height:1.35;color:#1f1f2a}
-.kw-name mark{background:linear-gradient(180deg,transparent 58%,rgba(0,170,184,0.3) 58%);color:inherit;font-weight:700;padding:0 2px}
-.kw-body{padding:2px 18px 14px}
+.kw-top{padding:18px 20px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.kw-num{font-family:var(--font-display);font-size:.62rem;font-weight:500;letter-spacing:.04em;padding:0;
+  background:transparent;color:#999;border:none;
+  flex-shrink:0;white-space:nowrap}
+.kw-name{font-family:var(--font-display);font-size:1.06rem;font-weight:600;flex:1;letter-spacing:-.01em;line-height:1.35;color:#111}
+.kw-name mark{background:rgba(34,197,94,0.18);color:#166534;font-weight:600;padding:0 2px;border-radius:2px}
+.kw-body{padding:0 20px 16px}
 
-/* ===== 区块通用样式 ===== */
-.kw-section{position:relative;margin-bottom:8px;padding:10px 14px;border-radius:12px}
-.kw-section:last-child{margin-bottom:0}
-/* ===== 区块标签（带图标胶囊） ===== */
-.kw-label{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 6px;border-radius:20px;
-  font-family:var(--font-display);font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  margin-bottom:4px;white-space:nowrap;background:rgba(0,0,0,0.06);color:#333;border:none}
-.kw-label-pro,.kw-label-ez{background:rgba(34,197,94,0.12);color:#166534}
-.kw-label-ref,.kw-label-ind{background:rgba(0,0,0,0.06);color:#333}
+/* ===== 区块通用样式（改为分隔线模式，无背景） ===== */
+.kw-section{position:relative;padding:12px 0 12px;border-top:0.5px solid rgba(0,0,0,0.08);background:transparent}
+.kw-section:first-child{border-top:none;padding-top:4px}
 
-/* 专业释义区块 */
-.kw-section-pro{background:rgba(0,0,0,0.02);border-radius:12px}
-.kw-pro-text{font-size:.88rem;color:#1a1a1a;line-height:1.8;letter-spacing:-.003em}
-.kw-pro-text mark{background:rgba(34,197,94,0.15);color:#166534;padding:0 2px;font-weight:600;border-radius:2px}
+/* ===== 区块标签：纯文字 + 字距（无背景胶囊、无 emoji） ===== */
+.kw-label{display:inline-block;padding:0;border-radius:0;
+  font-family:var(--font-display);font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:8px;white-space:nowrap;background:transparent;border:none}
+.kw-label-pro,.kw-label-ez{color:#0F6E56}
+.kw-label-ref,.kw-label-ind{color:#5F5E5A}
 
-/* 大白话区块 */
-.kw-section-ez{background:rgba(34,197,94,0.08);border-radius:12px;padding:10px 14px 8px}
-.kw-ez-text{position:relative;font-size:.88rem;color:#1a1a1a;line-height:1.8;letter-spacing:-.003em;padding-left:16px}
-.kw-ez-text::before{content:'💬';position:absolute;left:-2px;top:0;font-size:.9rem}
-.kw-ez-text mark{background:rgba(34,197,94,0.2);color:#166534;padding:1px 4px;border-radius:2px;font-weight:600}
+/* 专业释义区块：无背景 */
+.kw-section-pro{background:transparent}
+.kw-pro-text{font-size:.86rem;color:#1a1a1a;line-height:1.85;letter-spacing:-.003em}
+.kw-pro-text mark{background:rgba(34,197,94,0.18);color:#166534;padding:0 2px;font-weight:600;border-radius:2px}
+/* 数字/百分比/L级别 高亮 */
+.kw-num-hl{color:#0F6E56;font-weight:600}
+.kw-data-hl{color:#993C1D;font-weight:600}
+.kw-co-hl{color:#185FA5;font-weight:600}
 
-/* ===== 查资料（独立区块） ===== */
-.kw-section-ref{background:rgba(0,0,0,0.03);border-radius:12px;padding:10px 14px 8px}
-.kw-label-ref{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 6px;border-radius:20px;
-  font-family:var(--font-display);font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  margin-bottom:4px;background:rgba(0,0,0,0.06);color:#333;border:none}
-.kw-label-ref svg{width:12px;height:12px;stroke-width:2.5;stroke:#333;flex-shrink:0}
-.kw-ref-links{
-  display:flex;gap:8px;align-items:center;
-  padding:0;flex-wrap:wrap;
-}
+/* 大白话区块：唯一保留淡绿底（情感锚点） */
+.kw-section-ez{background:#F0F8F2;border-radius:12px;padding:12px 14px;border-top:none;margin-top:6px}
+.kw-section-ez + .kw-section{border-top:none}
+.kw-ez-text{position:relative;font-size:.86rem;color:#1a1a1a;line-height:1.85;letter-spacing:-.003em}
+.kw-ez-text::before{display:none}
+.kw-ez-text mark{background:rgba(34,197,94,0.22);color:#166534;padding:0 2px;border-radius:2px;font-weight:600}
+
+/* ===== 查资料：标签和按钮一行 ===== */
+.kw-section-ref{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:transparent}
+.kw-section-ref .kw-label{margin-bottom:0}
+.kw-label-ref{color:#5F5E5A}
+.kw-ref-links{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .kw-ref{
-  height:24px;padding:0 10px;border-radius:20px;
+  height:24px;padding:0 10px;border-radius:12px;
   display:inline-flex;align-items:center;gap:4px;
-  background:rgba(0,0,0,0.06);border:none;
-  color:#333;font-size:.7rem;font-weight:700;letter-spacing:.02em;
+  background:#F4F4F1;border:none;
+  color:#444;font-size:.7rem;font-weight:500;letter-spacing:.02em;
   cursor:pointer;transition:all .2s cubic-bezier(0.16,1,0.3,1);
   text-decoration:none;font-family:var(--font-display),sans-serif;
 }
 .kw-ref::after{
-  content:'↗';font-size:.72rem;opacity:.6;margin-left:1px;
+  content:'↗';font-size:.7rem;opacity:.5;margin-left:2px;
 }
-.kw-ref:hover{background:rgba(34,197,94,0.15);color:#166534;border:none;transform:translateY(-1px)}
+.kw-ref:hover{background:#E8F1EB;color:#0F6E56;transform:translateY(-1px)}
 .kw-ref:hover::after{opacity:1}
 
-/* ===== 专·行业参考数据 ===== */
-.kw-section-ind{background:rgba(0,0,0,0.03);border-radius:12px;padding:10px 14px 8px}
-.kw-label-ind{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 6px;border-radius:20px;
-  font-family:var(--font-display);font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  margin-bottom:4px;background:rgba(0,0,0,0.06);color:#333;border:none}
-.kw-label-ind svg{width:12px;height:12px;stroke-width:2.5;stroke:#333;flex-shrink:0}
+/* ===== 行业数据 ===== */
+.kw-section-ind{background:transparent}
+.kw-label-ind{color:#5F5E5A}
 .kw-id-text{
-  font-size:.88rem;color:#1a1a1a;line-height:1.8;
-  padding:0 2px;letter-spacing:-.003em
+  font-size:.86rem;color:#1a1a1a;line-height:1.85;
+  padding:0;letter-spacing:-.003em
 }
-.kw-id-text mark{background:rgba(34,197,94,0.15);color:#166534;padding:1px 4px;border-radius:2px;font-weight:600}
+.kw-id-text mark{background:rgba(34,197,94,0.18);color:#166534;padding:0 2px;border-radius:2px;font-weight:600}
 
 /* 小屏适配 */
 @media(max-width:520px){
-  .kw-card{border-radius:16px}
-  .kw-top{padding:14px 14px 2px}
-  .kw-body{padding:2px 14px 14px}
-  .kw-section{padding:10px 12px;margin-bottom:6px}
+  .kw-card{border-radius:14px}
+  .kw-top{padding:16px 16px 10px}
+  .kw-body{padding:0 16px 14px}
+  .kw-section{padding:10px 0}
+  .kw-section-ez{padding:10px 12px}
   .kw-ref{padding:0 8px;font-size:.65rem;height:22px}
-  .kw-id-text{font-size:.83rem}
-  .kw-pro-text{font-size:.84rem}
-  .kw-ez-text{font-size:.84rem}
+  .kw-id-text,.kw-pro-text,.kw-ez-text{font-size:.83rem}
 }
 
 /* Category color strips (hidden - 极简风格) */
@@ -2043,7 +2038,12 @@ function renderTop3(indId, indName) {
     var lifeIdx = (typeof c.lifecycle === 'number') ? c.lifecycle : 1;
     var lifePct = ((lifeIdx) / (lifecyclePhases.length - 1)) * 100;
     var tagsHtml = (c.tags || []).map(function(t){return '<span class="cmp-tag">' + t + '</span>';}).join('');
-    var revHtml = (c.revenue || []).map(function(r){
+    // 兜底：若 revenue 仅 1 项 pct=100，加未公开提示而不是单条进度条
+    var revArr = c.revenue || [];
+    var revIsPlaceholder = (revArr.length === 1 && revArr[0] && revArr[0].pct === 100);
+    var revHtml = revIsPlaceholder
+      ? '<div class="cmp-rev-empty">营收结构未公开 · ' + (revArr[0].label || '主要支出') + '</div>'
+      : revArr.map(function(r){
       return '<div class="cmp-rev-item">' +
         '<div class="cmp-rev-label">' + r.label + '</div>' +
         '<div class="cmp-rev-bar-wrap"><div class="cmp-rev-bar" style="--w:' + r.pct + '%;background:' + (r.color || '#f4a7b9') + '"></div></div>' +
@@ -2128,51 +2128,59 @@ function renderGrid(data) {
     var googleQ = (kw.ref && kw.ref.google) ? encodeURIComponent(kw.ref.google) : q;
     var wikiQ   = (kw.ref && kw.ref.wiki) ? encodeURIComponent(kw.ref.wiki) : q;
     var refLinks =
-      '<a class="kw-ref kw-ref-w" href="https://zh.wikipedia.org/wiki/Special:Search?search=' + wikiQ + '" target="_blank" rel="noopener" title="Wikipedia 维基百科">WIKI ↗</a>' +
-      '<a class="kw-ref kw-ref-g" href="https://www.google.com/search?q=' + googleQ + '" target="_blank" rel="noopener" title="Google 搜索">GOOGLE ↗</a>';
+      '<a class="kw-ref kw-ref-w" href="https://zh.wikipedia.org/wiki/Special:Search?search=' + wikiQ + '" target="_blank" rel="noopener" title="Wikipedia 维基百科">Wiki ↗</a>' +
+      '<a class="kw-ref kw-ref-g" href="https://www.google.com/search?q=' + googleQ + '" target="_blank" rel="noopener" title="Google 搜索">Google ↗</a>';
     // industryData section (专·行业参考数据)
     var indSection = '';
     if (kw.industryData && kw.industryData.length > 10) {
       indSection = '<div class="kw-section kw-section-ind">' +
-        '<div class="kw-label kw-label-ind">' +
-          '📈 ' +
-          '行业数据' +
-        '</div>' +
-        '<div class="kw-id-text">' + hl(kw.industryData, hlWords) + '</div>' +
+        '<div class="kw-label kw-label-ind">行业数据</div>' +
+        '<div class="kw-id-text">' + autoHl(hl(kw.industryData, hlWords)) + '</div>' +
       '</div>';
     }
     return '<div class="kw-card scroll-reveal" data-delay="' + delay + '">' +
       '<div class="' + stripClass + '"></div>' +
       '<div class="kw-top">' +
-        '<div class="kw-name">🏷️ ' + hl(kw.term, hlWords) + '</div>' +
+        '<div class="kw-name">' + hl(kw.term, hlWords) + '</div>' +
         '<span class="kw-num">#' + (kw.rank || i + 1) + ' · ' + (catNames[kw.cat] || '') + '</span>' +
       '</div>' +
       '<div class="kw-body">' +
         '<div class="kw-section kw-section-pro">' +
-          '<div class="kw-label kw-label-pro">' +
-            '📖 ' +
-            '专业释义' +
-          '</div>' +
-          '<div class="kw-pro-text">' + hl(kw.pro, hlWords) + '</div>' +
+          '<div class="kw-label kw-label-pro">专业释义</div>' +
+          '<div class="kw-pro-text">' + autoHl(hl(kw.pro, hlWords)) + '</div>' +
         '</div>' +
         '<div class="kw-section kw-section-ref">' +
-          '<div class="kw-label kw-label-ref">' +
-            '🔍 ' +
-            '查资料' +
-          '</div>' +
+          '<div class="kw-label kw-label-ref">查资料</div>' +
           '<div class="kw-ref-links">' + refLinks + '</div>' +
         '</div>' +
         indSection +
         '<div class="kw-section kw-section-ez">' +
-          '<div class="kw-label kw-label-ez">' +
-            '💬 ' +
-            '说人话' +
-          '</div>' +
-          '<div class="kw-ez-text">' + hl(kw.ez, hlWords) + '</div>' +
+          '<div class="kw-label kw-label-ez">说人话</div>' +
+          '<div class="kw-ez-text">' + autoHl(hl(kw.ez, hlWords)) + '</div>' +
         '</div>' +
       '</div></div>';
   }).join('');
   observeScrollReveal();
+}
+
+/* 自动高亮：百分比/数字+%/L0-L5 等级别  →  绿色加粗（不重复包裹已 mark/b 的部分） */
+function autoHl(html) {
+  if (!html) return '';
+  // 临时 placeholder 保护已有的标签和 mark 包裹的内容
+  var placeholders = [];
+  var safe = html.replace(/<mark[\s\S]*?<\/mark>|<b[\s\S]*?<\/b>|<a[\s\S]*?<\/a>/g, function(m){
+    placeholders.push(m);
+    return '__PH' + (placeholders.length - 1) + '__';
+  });
+  // 百分比 (含 1-3 位整数和可能的小数和 +)
+  safe = safe.replace(/(\d+(?:\.\d+)?%\+?)/g, '<b class="kw-num-hl">$1</b>');
+  // L0-L5 / L2+ 这种自动驾驶等级
+  safe = safe.replace(/\b(L[0-9](?:[\u2013\-]L[0-9])?\+?)\b/g, '<b class="kw-num-hl">$1</b>');
+  // 还原 placeholders
+  safe = safe.replace(/__PH(\d+)__/g, function(_, idx){
+    return placeholders[parseInt(idx, 10)];
+  });
+  return safe;
 }
 
 /* Scroll reveal with IntersectionObserver */
