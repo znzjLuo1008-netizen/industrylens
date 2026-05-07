@@ -664,13 +664,13 @@ input{font-family:inherit;color:inherit}
 .cmp-rev-pct{font-family:var(--font-display);font-size:.75rem;font-weight:700;color:#1f1f2a;width:42px;text-align:right;letter-spacing:-.01em}
 .cmp-rev-empty{font-size:.75rem;color:#999;font-style:italic;padding:8px 12px;background:rgba(0,0,0,0.03);border-radius:8px;text-align:center;letter-spacing:.02em}
 
-.cmp-visit{display:inline-flex;align-items:center;gap:6px;margin:4px 20px 20px;padding:9px 16px;border-radius:14px;
-  background:linear-gradient(135deg,rgba(0,170,184,0.1),rgba(79,194,200,0.12));color:#007a85;
-  font-size:.8rem;font-weight:600;text-decoration:none;letter-spacing:.01em;transition:all .3s ease;position:relative;z-index:1;
-  border:1px solid rgba(0,170,184,0.2)}
-.cmp-visit:hover{transform:translateX(3px) translateY(-1px);box-shadow:0 6px 18px rgba(0,170,184,0.25);background:linear-gradient(135deg,#00AAB8,#7FD3D6);color:#fff;border-color:#00AAB8}
-.cmp-visit svg{width:12px;height:12px;stroke-width:2.5;stroke:#007a85;transition:stroke .3s}
-.cmp-visit:hover svg{stroke:#fff;transform:translate(2px,-2px)}
+.cmp-visit{display:inline-flex;align-items:center;gap:6px;margin:4px 20px 20px;padding:8px 14px;border-radius:12px;
+  background:#F4F4F1;color:#444;
+  font-size:.78rem;font-weight:500;text-decoration:none;letter-spacing:.01em;transition:all .2s ease;position:relative;z-index:1;
+  border:none}
+.cmp-visit:hover{transform:translateY(-1px);background:#E8F1EB;color:#0F6E56}
+.cmp-visit svg{width:12px;height:12px;stroke-width:2.5;stroke:#666;transition:stroke .2s}
+.cmp-visit:hover svg{stroke:#0F6E56;transform:translate(2px,-2px)}
 
 @media (max-width:960px){
   .top3-grid{grid-template-columns:1fr}
@@ -725,15 +725,15 @@ input{font-family:inherit;color:inherit}
 .kw-ref{
   height:24px;padding:0 10px;border-radius:12px;
   display:inline-flex;align-items:center;gap:4px;
-  background:#F4F4F1;border:none;
-  color:#444;font-size:.7rem;font-weight:500;letter-spacing:.02em;
+  background:#E8F1EB;border:none;
+  color:#166534;font-size:.72rem;font-weight:600;letter-spacing:.02em;
   cursor:pointer;transition:all .2s cubic-bezier(0.16,1,0.3,1);
   text-decoration:none;font-family:var(--font-display),sans-serif;
 }
 .kw-ref::after{
-  content:'↗';font-size:.7rem;opacity:.5;margin-left:2px;
+  content:'↗';font-size:.7rem;opacity:.7;margin-left:2px;
 }
-.kw-ref:hover{background:#E8F1EB;color:#0F6E56;transform:translateY(-1px)}
+.kw-ref:hover{background:#0F6E56;color:#fff;transform:translateY(-1px);box-shadow:0 4px 10px rgba(15,110,86,0.25)}
 .kw-ref:hover::after{opacity:1}
 
 /* ===== 行业数据 ===== */
